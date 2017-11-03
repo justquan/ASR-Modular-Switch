@@ -14,5 +14,10 @@ boolean relayState = false; //If false, relay is closed; if true, relay is open
  decode_results results;
 
  //setting variables
-int lightThresh = 450; // threshold value for light sensor, a higher value means there is more light
- 
+int lightThresh = 450; //threshold value for light sensor, a higher value means there is more light
+double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
+int motionDelay = 60000; //time in milliseconds that the switch is closed after motion is detected until the sensing again
+
+//Scaling constants
+double tempConversion = .48828125; //constant for lm35 sensor
+

@@ -1,5 +1,6 @@
 #include "Variables.h";
 
+//TODO: implement bluetooth
 void setup() {
    Serial.begin(9600); //baud rate of 9600
 
@@ -14,6 +15,4 @@ void setup() {
 
 void loop() {
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
-  
-   
 }
