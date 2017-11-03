@@ -1,7 +1,7 @@
-void relayClose(){
+void closeRelay(){
   
 }
 
-void relayOpen() {
-  //pin++;
+void openRelay() {
+  
 }
