@@ -1,0 +1,4 @@
+void getTemp(){
+  relayOpen();
+  
+}
