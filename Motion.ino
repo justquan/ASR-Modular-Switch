@@ -9,6 +9,14 @@ boolean isMotion(){
   }
 }
 
+void printMotionData(){
+  if(isMotion()){
+    Serial.print("Motion detected!");
+  }
+  else{
+    Serial.print("No motion");
+  }
+}
 
 void motionSwitch(){
   if (isMotion){

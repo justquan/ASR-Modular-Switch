@@ -19,5 +19,9 @@ double tempThreshF = 60; //threshold value for temperature sensor in degrees Fah
 int motionDelay = 60000; //time in milliseconds that the switch is closed after motion is detected until the sensing again
 
 //Scaling constants
-double tempConversion = .48828125; //constant for lm35 sensor
+const double tempConversion = .48828125; //constant for lm35 sensor
+
+//index variables
+int moduleIndex = 3; //index variable determining which sensor is being used
+
 
