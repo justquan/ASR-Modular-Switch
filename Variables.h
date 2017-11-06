@@ -1,5 +1,5 @@
 #include <IRremote.h>// public ir library
-
+#include <SoftwareSerial.h> //Needed for bluetooth serial data from wireless UART adaptor
 boolean relayState = false; //If false, relay is closed; if true, relay is open
 
 //Pins
@@ -22,6 +22,8 @@ int motionDelay = 60000; //time in milliseconds that the switch is closed after 
 const double tempConversion = .48828125; //constant for lm35 sensor
 
 //index variables
-int moduleIndex = 3; //index variable determining which sensor is being used
 
+//bluetooth variables
+SoftwareSerial BT(10,11); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
+char moduleIndex; ////stores incoming character sent by bluetooth client, index variable determining which sensor is being used
 
