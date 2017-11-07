@@ -1,4 +1,11 @@
 //TODO: implement changeable timer 
+//ISSUE: still delays, false positives
+
+//PIR Pinout:
+//Lense facing away from you:
+//Left Pin: 5V
+//Middle Pin: Signal
+//Right Pin: GND
 
 boolean isMotion(){
   if(digitalRead(pirPin) == HIGH){
@@ -11,11 +18,12 @@ boolean isMotion(){
 
 void printMotionData(){
   if(isMotion()){
-    Serial.print("Motion detected!");
+    Serial.println("Motion detected!");
   }
   else{
-    Serial.print("No motion");
+    Serial.println("No motion");
   }
+  delay(300);
 }
 
 void motionSwitch(){

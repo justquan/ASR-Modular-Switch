@@ -3,7 +3,7 @@
 //TODO: implement bluetooth
 void setup() {
   Serial.begin(9600); //baud rate of 9600
-  BT.begin(9600);
+//  BT.begin(9600); // interferes serial begin?? TODO: test this with bluetooth module
 
   //setting pin modes
   pinMode(lightPin, INPUT);// TODO: possibly need to change to just constant pins based on numbers (like pin1 and pin2) instead of pins based on sensors because of the modular design
@@ -19,6 +19,8 @@ void setup() {
 }
 
 void loop() {
+  printMotionData();
+  //lightSwitch();
   if (BT.available()) {
     moduleIndex = BT.read();
     if (moduleIndex == '0') {

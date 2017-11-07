@@ -5,6 +5,7 @@ void closeRelay(){
   if(relayState){
     digitalWrite(relayPin, HIGH);
     relayState = false;
+    Serial.println("Relay closed");
   }
 }
 
@@ -14,6 +15,7 @@ void openRelay(){
   if(!relayState){
     digitalWrite(relayPin, LOW);
     relayState = true;
+    Serial.println("Relay open");
   }
 }
 
