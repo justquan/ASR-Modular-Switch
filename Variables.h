@@ -1,5 +1,7 @@
 #include <IRremote.h>// public ir library
 #include <SoftwareSerial.h> //Needed for bluetooth serial data from wireless UART adaptor
+#include <EEPROM.h> //for long term variables with saved values
+
 boolean relayState = false; //If false, relay is closed; if true, relay is open
 
 //Pins
@@ -16,7 +18,7 @@ boolean relayState = false; //If false, relay is closed; if true, relay is open
  decode_results results;
 
  //setting variables
-int lightThresh = 450; //threshold value for light sensor, a higher value means there is more light
+int lightThresh = 400; //threshold value for light sensor, a higher value means there is more light
 double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
 int motionDelay = 60000; //time in milliseconds that the switch is closed after motion is detected until the sensing again
 
@@ -29,3 +31,5 @@ const double tempConversion = .48828125; //constant for lm35 sensor
 SoftwareSerial BT(10,11); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
 char moduleIndex = '-1'; ////stores incoming character sent by bluetooth client, index variable determining which sensor is being used
 
+//timer in milliseconds
+int timer;

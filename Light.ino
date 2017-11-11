@@ -1,28 +1,35 @@
 
 //returns int data received by the light sensor and prints it
 //setup:
-//photoresistor end 1 to 5v
+//photoresistor end 1 to GND
 //photoresistor end 2 to Analog pin 0
-//photoresistor end 2 to 10k resistor
-//10k resistor to ground
+//10k resistor end 1 to Analog pin 0
+//10k resistor end 2 to +5V
  
 //a higher value for lightData means there is more light and less resistance
 int getLightData(){
   int lightData = analogRead(lightPin);
-  Serial.println("lightData: ");//Don't condense print statements into one line or else error
-  Serial.print(lightData);
-  Serial.println (" ");
   return lightData;
 }
 
+void printLightData() {
+  Serial.println("lightData: ");//Don't condense print statements into one line or else error
+  BT.println(getLightData());
+  Serial.println (" ");
+}
 void lightSwitch(){
-  delay(100);
- 
+  delay(500);
+  printLightData();
+  
   if (getLightData() < lightThresh && !relayState){
     openRelay();
+      BT.println("It's bright");
+
   }
   else if(getLightData() >= lightThresh && relayState) {
     closeRelay(); //open and closed must be closed might be reversed
+          BT.println("It's dark");
+
   }
 }
 

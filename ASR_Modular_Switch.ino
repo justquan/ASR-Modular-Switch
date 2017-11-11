@@ -3,7 +3,7 @@
 //TODO: implement bluetooth
 void setup() {
   Serial.begin(9600); //baud rate of 9600
-//  BT.begin(9600); // interferes serial begin?? TODO: test this with bluetooth module
+  BT.begin(9600); // interferes serial begin?? TODO: test this with bluetooth module
 
   //setting pin modes
   pinMode(lightPin, INPUT);// TODO: possibly need to change to just constant pins based on numbers (like pin1 and pin2) instead of pins based on sensors because of the modular design
@@ -15,16 +15,18 @@ void setup() {
   // set the data rate for the SoftwareSerial port
   //BT.begin(9600); //TODO: see if this conflicts with Serial.begin();
   // Send test message to other device
-  //BT.println("Hello from Arduino");
+  BT.println("Hello from Arduino");
+  Serial.println("koooooooo");
+  timer = 0;
 }
 
 void loop() {
-  printMotionData();
-  //lightSwitch();
+  //printMotionData();
+  lightSwitch();/*
   if (BT.available()) {
     moduleIndex = BT.read();
     if (moduleIndex == '0') {
-
+      delay(100);
     }
     else if (moduleIndex == '1') {
       lightSwitch();
@@ -45,6 +47,6 @@ void loop() {
     else if (moduleIndex == '6') {
       temperatureSwitch(70);
     }
-  }
+  }*/
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
 }
