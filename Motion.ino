@@ -29,7 +29,7 @@ void printMotionData(){
 void motionSwitch(){
   if (isMotion){
     closeRelay();
-    delay(motionDelay);//Not the best bethod because everything else stops when there's a delay
+    delay(motionDelay);//Not the best bethod because everything else stops when there's a delay, need to change, use timer instead so switch can still sense for data and use other functions
   }
   else{
     openRelay();

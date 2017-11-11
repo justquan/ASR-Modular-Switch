@@ -16,37 +16,9 @@ void setup() {
   //BT.begin(9600); //TODO: see if this conflicts with Serial.begin();
   // Send test message to other device
   BT.println("Hello from Arduino");
-  Serial.println("koooooooo");
   timer = 0;
 }
 
 void loop() {
-  //printMotionData();
-  lightSwitch();/*
-  if (BT.available()) {
-    moduleIndex = BT.read();
-    if (moduleIndex == '0') {
-      delay(100);
-    }
-    else if (moduleIndex == '1') {
-      lightSwitch();
-      BT.println("light sensor selected"); //TODO: Do this for other moduleIndex values if this works
-    }
-    else if (moduleIndex == '2') {
-
-    }
-    else if (moduleIndex == '3') {
-      motionSwitch();
-    }
-    else if (moduleIndex == '4') {
-
-    }
-    else if (moduleIndex == '5') {
-
-    }
-    else if (moduleIndex == '6') {
-      temperatureSwitch(70);
-    }
-  }*/
-  //TODO: create proper system to determine what module is being used to use appropriate methods in code
+  manualBTSensorChooser();
 }
