@@ -1,7 +1,7 @@
 void manualBTSensorChooser() {
   setModuleIndexFromBT();
 
-  if (moduleIndex == '1') {
+  if (moduleIndex == '5') {
     lightSwitch();
   }
 
@@ -17,15 +17,16 @@ void manualBTSensorChooser() {
 
   }
 
-   else if (moduleIndex == "TO") {//debug NEED TO CHANGE TO SOMETHING OTHER THAN MODULE INDEX BC IT IS A CHAR AND TO IS A STRING??
-    Serial.println("101");
-    digitalWrite(LED_BUILTIN, HIGH);
-    
+   else if (moduleIndex.equals("ON")) {//debug NEED TO CHANGE TO SOMETHING OTHER THAN MODULE INDEX BC IT IS A CHAR AND TO IS A STRING??
+    Serial.println("ON");//debugging
+    digitalWrite(LED_BUILTIN, HIGH);//debugging
+    //TODO: use with ints maybe to make it more efficient and easier to work with. Also, store values into EEPROM and make a "key" for interpreting EEPROM values and at what spot
   }
-    else if (moduleIndex == "TF") {//debug
-  Serial.println("202");
+    else if (moduleIndex.equals("OFF")) {//debug
+  Serial.println("OFF");
   digitalWrite(LED_BUILTIN, LOW);
   }
+  moduleIndex = "";//to reset moduleIndex value
 
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
 }
@@ -33,7 +34,8 @@ void manualBTSensorChooser() {
 //Reads input from bluetooth sensor and sets char moduleIndex to the received data
 void setModuleIndexFromBT() {
   if (BT.available()) {
-    char dataFromBT = BT.read();
+    String dataFromBT = BT.readString();//to return an int, just use read()
+    Serial.println(dataFromBT);
     moduleIndex = dataFromBT;
   }
 }

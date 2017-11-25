@@ -11,9 +11,6 @@ void setup() {
   pinMode(relayPin, OUTPUT);
 
   irrecv.enableIRIn(); // Start the ir receiver
-
-  // set the data rate for the SoftwareSerial port
-  //BT.begin(9600); //TODO: see if this conflicts with Serial.begin();
   // Send test message to other device
   BT.println("Hello from Arduino");
   timer = 0;
