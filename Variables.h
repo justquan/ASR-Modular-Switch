@@ -18,7 +18,7 @@ IRrecv irrecv(IRpin);
 decode_results results;
 
 //setting variables
-int lightThresh = 400; //threshold value for light sensor, a higher value means there is more light
+int lightThresh = 500; //threshold value for light sensor, a LOWER value means there is more light
 double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
 int motionDelay = 60000; //time in milliseconds that the switch is closed after motion is detected until the sensing again
 
@@ -33,3 +33,4 @@ char moduleIndex = '0'; //stores incoming character sent by bluetooth client, in
 
 //timer in milliseconds
 int timer;
+

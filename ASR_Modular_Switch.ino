@@ -17,6 +17,8 @@ void setup() {
   // Send test message to other device
   BT.println("Hello from Arduino");
   timer = 0;
+    pinMode(LED_BUILTIN, OUTPUT);//for testing from instructables
+
 }
 
 void loop() {

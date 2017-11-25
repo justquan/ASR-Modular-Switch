@@ -17,6 +17,16 @@ void manualBTSensorChooser() {
 
   }
 
+   else if (moduleIndex == "TO") {//debug NEED TO CHANGE TO SOMETHING OTHER THAN MODULE INDEX BC IT IS A CHAR AND TO IS A STRING??
+    Serial.println("101");
+    digitalWrite(LED_BUILTIN, HIGH);
+    
+  }
+    else if (moduleIndex == "TF") {//debug
+  Serial.println("202");
+  digitalWrite(LED_BUILTIN, LOW);
+  }
+
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
 }
 
