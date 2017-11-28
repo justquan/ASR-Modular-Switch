@@ -17,14 +17,14 @@ void manualBTSensorChooser() {
 
   }
 
-   else if (moduleIndex.equals("ON")) {//debug NEED TO CHANGE TO SOMETHING OTHER THAN MODULE INDEX BC IT IS A CHAR AND TO IS A STRING??
+  else if (moduleIndex.equals("ON")) {//debug NEED TO CHANGE TO SOMETHING OTHER THAN MODULE INDEX BC IT IS A CHAR AND TO IS A STRING??
     Serial.println("ON");//debugging
     digitalWrite(LED_BUILTIN, HIGH);//debugging
     //TODO: use with ints maybe to make it more efficient and easier to work with. Also, store values into EEPROM and make a "key" for interpreting EEPROM values and at what spot
   }
-    else if (moduleIndex.equals("OFF")) {//debug
-  Serial.println("OFF");
-  digitalWrite(LED_BUILTIN, LOW);
+  else if (moduleIndex.equals("OFF")) {//debug
+    Serial.println("OFF");
+    digitalWrite(LED_BUILTIN, LOW);
   }
   moduleIndex = "";//to reset moduleIndex value
 
@@ -33,10 +33,22 @@ void manualBTSensorChooser() {
 
 //Reads input from bluetooth sensor and sets char moduleIndex to the received data
 void setModuleIndexFromBT() {
-  if (BT.available()) {
-    String dataFromBT = BT.readString();//to return an int, just use read()
-    Serial.println(dataFromBT);
-    moduleIndex = dataFromBT;
+  if (BT.available() > 0) {
+    command = "";//see program BT_receiving_Commands
+  //Serial.println(dataFromBT);//debug to return ALL commands
   }
+  while (BT.available() > 0) {
+    command = BT.readString();//to return an int, just use read()
+  }
+  if (!command.equals("")) {//if command doesn't equal nothing 
+    String lastThreeData = command.substring(command.length() - 3);//the last 3 letters of the command
+    Serial.println(lastThreeData);//prints the last 3 letters of the command
+    command = "";
+  }
+}
+
+//to interpret the three character String received as data via BT
+void interpretCommand (String dataBT){
+  
 }
 

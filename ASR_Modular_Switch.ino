@@ -1,6 +1,6 @@
 #include "Variables.h" //File with my global variables
 
-//TODO: implement bluetooth
+//TODO: find a way to send data from HC-06 to Android
 void setup() {
   Serial.begin(9600); //baud rate of 9600
   BT.begin(9600); // interferes serial begin?? TODO: test this with bluetooth module
@@ -15,7 +15,6 @@ void setup() {
   BT.println("Hello from Arduino");
   timer = 0;
     pinMode(LED_BUILTIN, OUTPUT);//for testing from instructables
-
 }
 
 void loop() {

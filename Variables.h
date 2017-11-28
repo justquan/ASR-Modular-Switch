@@ -30,6 +30,7 @@ const double tempConversion = .48828125; //constant for lm35 sensor
 //bluetooth variables
 SoftwareSerial BT(10, 11); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
 String moduleIndex = "-1"; //stores incoming character sent by bluetooth client, index variable determining which sensor is being used
+String command = ""; //placeholder string for bluetooth data
 
 //timer in milliseconds
 int timer;
