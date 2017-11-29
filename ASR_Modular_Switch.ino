@@ -18,5 +18,7 @@ void setup() {
 }
 
 void loop() {
-  manualBTSensorChooser();
+  //manualBTSensorChooser();
+  receiveData();
+  lightSwitch();
 }
