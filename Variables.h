@@ -10,7 +10,7 @@ int relayPin = 1; //D1, digital pin for relay control
 int lightPin = 0; //A0, analog pin for photoresistor (light) sensor
 int pirPin = 2; //D2, digital pin for Passive Infrared (PIR) sensor
 int tempPin = 2; // A2, analog pin for temperature sensor
-int IRpin = 12;  // D12, digital pin for IR sensor
+int IRpin = 9;  // D9, digital pin for IR sensor
 int BTTX = 10; //D10, connect TX pin from BT module to this pin
 int BTRX = 11; //D11, connect RX pin from Bt module to this pin
 

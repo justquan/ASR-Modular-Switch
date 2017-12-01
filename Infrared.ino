@@ -3,9 +3,17 @@
 
 //TODO: learn how to make system to choose when setting the code and storing to eeprom or clearing eeprom
 void infraredSwitch() {
+
+}
+
+void printIRCode() {
   if (irrecv.decode(&results)) {
     Serial.println(results.value, DEC); // Print the Serial 'results.value'
     irrecv.resume();   // Receive the next value
   }
+}
+
+void storeIRCode() {
+  
 }
 

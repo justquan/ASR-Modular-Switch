@@ -14,7 +14,7 @@ int getLightData() {
 
 void printLightData() {
   Serial.println("lightData: ");//Don't condense print statements into one line or else error
-  BT.println(getLightData());
+  Serial.println(getLightData());
   Serial.println (" ");
 }
 void lightSwitch() {
@@ -23,12 +23,12 @@ void lightSwitch() {
 
   if (getLightData() < lightThresh && !relayState) {
     openRelay();
-    BT.println("It's bright");//debugging
+    Serial.println("It's bright");//debugging
 
   }
   else if (getLightData() >= lightThresh && relayState) {
     closeRelay(); //open and closed must be closed might be reversed
-    BT.println("It's dark");//debugging
+    Serial.println("It's dark");//debugging
 
   }
 }
