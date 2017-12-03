@@ -1,6 +1,8 @@
 #include <IRremote.h>// public ir library
 #include <SoftwareSerial.h> //Needed for bluetooth serial data from wireless UART adaptor
 #include <EEPROM.h> //for long term variables with saved values
+#include "EEPROMAnything.h"
+
 
 boolean relayState = false; //If false, relay is closed; if true, relay is open
 boolean triggerState = false; //If false, relay is closed; if true, relay is open. triggerState is the state the switch 
@@ -37,4 +39,14 @@ int timer;
 
 int moduleIndex = -1; //index variable determining which sensor is being used
 
+int IRcodeDEC = 0;
 
+unsigned long storedCode;//int or unsigned long?
+
+#define FNV_PRIME_32   16777619//from github ir demo program for hashing and saving ir code
+#define FNV_BASIS_32   2166136261
+
+/**
+ * EEPROM address to save IR code
+ */
+#define ADDR_CODE      0

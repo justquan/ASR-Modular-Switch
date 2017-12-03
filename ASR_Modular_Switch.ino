@@ -1,6 +1,5 @@
 #include "Variables.h" //File with my global variables
 
-//TODO: find a way to send data from HC-06 to Android
 void setup() {
   Serial.begin(9600); //baud rate of 9600
   BT.begin(9600); // interferes serial begin?? TODO: test this with bluetooth module
@@ -14,11 +13,40 @@ void setup() {
   // Send test message to other device
   BT.println("Hello from Arduino");
   timer = 0;
-    pinMode(LED_BUILTIN, OUTPUT);//for testing from instructables
+  pinMode(LED_BUILTIN, OUTPUT);//for testing from instructables
+
+  EEPROM_readAnything(0, storedCode);//reads whatever is at spot 0 in EEPROM and assigns value to storedCode
+  Serial.println(storedCode);//debug
+  printAllEEPROMAnything();
 }
 
 void loop() {
   //manualBTSensorChooser();
-  receiveData();
-  lightSwitch();
+  //receiveData();
+  //lightSwitch();
+  storeIRCode();
+
 }
+
+void clearEEPROM() { //for testing, to clear all EEPROM data
+  for (int i = 0 ; i < EEPROM.length() ; i++) {
+    EEPROM.write(i, 0);
+  }
+}
+
+//prints every EEPROM Byte, including zero values
+void printAllEEPROMBytes() {
+  for (int i = 0 ; i < EEPROM.length() ; i++) {
+    Serial.println(EEPROM.read(i));
+  }
+}
+//prints all longs stored with EEPROM_writeAnything(), but also includes zero values.
+void printAllEEPROMAnything() {
+  for (int i = 0 ; i < EEPROM.length() ; i++) {
+    long temp;
+    EEPROM_readAnything(i, temp);
+    Serial.println(temp);
+  }
+}
+
+
