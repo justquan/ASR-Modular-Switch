@@ -5,7 +5,7 @@
 
 
 boolean relayState = false; //If false, relay is closed; if true, relay is open
-boolean triggerState = false; //If false, relay is closed; if true, relay is open. triggerState is the state the switch 
+int triggerState = 1; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch 
 
 //Pins
 int relayPin = 1; //D1, digital pin for relay control
@@ -50,3 +50,5 @@ unsigned long storedCode;//int or unsigned long?
  * EEPROM address to save IR code
  */
 #define ADDR_CODE      0
+
+boolean DEBUG = true;

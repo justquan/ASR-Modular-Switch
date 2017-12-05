@@ -6,6 +6,11 @@
 //10k resistor end 1 to Analog pin 0
 //10k resistor end 2 to +5V
 
+//receives the three char command from the interpretCommand(), and makes sense of it
+void lightInterpret(String filteredData) {
+
+}
+
 //a higher value for lightData means there is more light and less resistance
 int getLightData() {
   int lightData = analogRead(lightPin);

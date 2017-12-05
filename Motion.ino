@@ -7,6 +7,11 @@
 //Middle Pin: Signal
 //Right Pin: GND
 
+//receives the three char command from the interpretCommand(), and makes sense of it
+void motionInterpret(String filteredData) {
+
+}
+
 boolean isMotion(){
   if(digitalRead(pirPin) == HIGH){
     return true;

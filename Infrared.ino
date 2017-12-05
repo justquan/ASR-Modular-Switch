@@ -1,5 +1,9 @@
 //TODO: write code to easily program IR signal to code (later do this with android app)
 
+//receives the three char command from the interpretCommand(), and makes sense of it
+void infraredInterpret(String filteredData) {
+
+}
 
 //TODO: learn how to make system to choose when setting the code and storing to eeprom or clearing eeprom
 void infraredSwitch() {
