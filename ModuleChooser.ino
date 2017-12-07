@@ -1,22 +1,26 @@
-void manualBTSensorChooser() {
+void sensorChooser() {
   //setModuleIndexFromBT();
-
   if (moduleIndex == 1) {
     lightSwitch();
   }
 
   else if (moduleIndex == 2) {
-    //motionSwitch();//don't use right now because if select 2, the delay for motionSwitch() makes it so you can't switch back
+    infraredSwitch();
   }
 
   else if (moduleIndex == 3) {
-    temperatureSwitch(70); // TODO: make it so that user inputs threshold temp
+    temperatureSwitch();
   }
 
   else if (moduleIndex == 4) {
-
+    motionSwitch();
   }
-
+  else if (moduleIndex == 5) {
+    smokeSwitch();
+  }
+  else if (moduleIndex == 6) {
+    soundSwitch();
+  }
 
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
 }

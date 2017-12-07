@@ -1,5 +1,6 @@
 
 //returns int data received by the light sensor and prints it
+
 //setup:
 //photoresistor end 1 to GND
 //photoresistor end 2 to Analog pin 0
@@ -7,8 +8,9 @@
 //10k resistor end 2 to +5V
 
 //receives the three char command from the interpretCommand(), and makes sense of it
+//assumes that filteredData is a String representation of an integer
 void lightInterpret(String filteredData) {
-
+  lightThresh = filteredData.toInt();
 }
 
 //a higher value for lightData means there is more light and less resistance

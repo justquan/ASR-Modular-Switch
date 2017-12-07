@@ -33,8 +33,8 @@ void printTempData(){
   Serial.println("*F");
 }
 
-void temperatureSwitch(double threshold){//can also just use global variable tempThreshF
-  if (getTempF() < threshold){
+void temperatureSwitch(){//can also just use global variable tempThreshF
+  if (getTempF() < tempThreshF){
     openRelay();
   }
   else{

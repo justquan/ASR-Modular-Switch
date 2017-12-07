@@ -2,7 +2,12 @@
 
 //receives the three char command from the interpretCommand(), and makes sense of it
 void infraredInterpret(String filteredData) {
-
+  if (filteredData.equals("SET")) {
+    saveIR = true;//the switch is in saveIR mode, so all the IR values it receives are saved ask key values which turn on/off the switch if detected
+  }
+  else if (filteredData.equals("FIN")) {
+    saveIR = false;//the switch is done saving key IR values
+  }
 }
 
 //TODO: learn how to make system to choose when setting the code and storing to eeprom or clearing eeprom

@@ -2,3 +2,8 @@
 void smokeInterpret(String filteredData) {
 
 }
+
+void smokeSwitch() {
+  
+}
+

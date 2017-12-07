@@ -2,3 +2,8 @@
 void volumeInterpret(String filteredData) {
 
 }
+
+void soundSwitch(){
+  
+}
+
