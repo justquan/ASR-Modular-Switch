@@ -3,7 +3,7 @@ void sensorChooser() {
   if (moduleIndex == 1) {
     lightSwitch();
   }
-
+  
   else if (moduleIndex == 2) {
     infraredSwitch();
   }
@@ -45,8 +45,18 @@ void receiveData() {
 //to interpret the 4 character String received as data via BT
 void interpretCommand (String dataBT) {
 
+  //debugging with LED
+  if (dataBT.equals("_OFF")) {
+        digitalWrite(testLed, LOW);
+  }
+
+    //debugging with LED
+  if (dataBT.equals("__ON")) {
+    digitalWrite(testLed, HIGH);
+    BT.write("AON");
+  }
   //sets trigger state to 1, which is ON
-  if (dataBT.equals("GT01")) {
+  else if (dataBT.equals("GT01")) {
     triggerState = 1;
   }
 
@@ -56,9 +66,10 @@ void interpretCommand (String dataBT) {
   }
 
   //sets trigger state to 2, which is STROBE
-  else if (dataBT.equals("GT00")) {
+  else if (dataBT.equals("GT02")) {
     triggerState = 2;
   }
+  
   // if L is the first character of the command, set the moduleIndex to 0 so the microcontroller is using the light sensor, and parses rest of data for the lightInterpret to use.
   else if (dataBT.charAt(0) == 'L') {
     moduleIndex = 0;

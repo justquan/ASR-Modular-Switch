@@ -1,4 +1,4 @@
-//TODO: implement changeable timer 
+
 //ISSUE: still delays, false positives
 
 //PIR Pinout:

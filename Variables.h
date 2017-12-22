@@ -8,8 +8,9 @@ boolean relayState = false; //If false, relay is closed; if true, relay is open
 int triggerState = 1; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
 
 //Pins
+int testLed = 5; //D5, for debugging
 int relayPin = 1; //D1, digital pin for relay control
-int lightPin = 0; //A0, analog pin for photoresistor (light) sensor
+int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
 int pirPin = 2; //D2, digital pin for Passive Infrared (PIR) sensor
 int tempPin = 2; // A2, analog pin for temperature sensor
 int IRpin = 9;  // D9, digital pin for IR sensor

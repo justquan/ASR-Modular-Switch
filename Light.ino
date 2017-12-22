@@ -15,7 +15,7 @@ void lightInterpret(String filteredData) {
 
 //a higher value for lightData means there is more light and less resistance
 int getLightData() {
-  int lightData = analogRead(lightPin);
+  int lightData = analogRead(photoresistorPin);
   return lightData;
 }
 
