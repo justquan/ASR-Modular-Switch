@@ -36,6 +36,7 @@ SoftwareSerial BT(10, 11); //makes a "virtual" serial port / UART, connect bt mo
 String command = ""; //placeholder string for bluetooth data
 
 //timer in milliseconds
+boolean setupSwitch = true;//boolean to have bluetooth connection open for setting up the switch, TODO: implement a timer or some type of system for only receiving data from the Android at the beginning for a certain amount of time.
 int timer;
 
 int moduleIndex = -1; //index variable determining which sensor is being used

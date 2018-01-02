@@ -32,5 +32,3 @@ void storeIRCode() {//use EEPROM
   }
 }
 
-
-

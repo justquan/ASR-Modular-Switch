@@ -9,7 +9,7 @@ void setup() {
   pinMode(pirPin, INPUT);
   pinMode(relayPin, OUTPUT);
   pinMode(testLed, OUTPUT);//debug
-  
+
   irrecv.enableIRIn(); // Start the ir receiver
   // Send test message to other device
   //BT.println("Hello from Arduino");
@@ -25,11 +25,22 @@ void setup() {
 
 void loop() {
   //manualBTSensorChooser();
-  receiveData();
-  //lightSwitch();
-  //storeIRCode();
-
+  if (setupSwitch) { //if the switch is in the setup mode
+    receiveData();//then receive data from the Android
+  }
+  else {
+    sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
+  }
 }
+
+
+
+
+
+
+
+
+
 
 void clearEEPROM() { //for testing, to clear all EEPROM data
   for (int i = 0 ; i < EEPROM.length() ; i++) {

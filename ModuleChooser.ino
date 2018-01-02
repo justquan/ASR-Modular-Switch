@@ -3,7 +3,7 @@ void sensorChooser() {
   if (moduleIndex == 1) {
     lightSwitch();
   }
-  
+
   else if (moduleIndex == 2) {
     infraredSwitch();
   }
@@ -25,7 +25,7 @@ void sensorChooser() {
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
 }
 
-//Reads input from bluetooth sensor and sets char moduleIndex to the received data
+//Reads input from bluetooth sensor and calls interpretCommand for the last four characters
 void receiveData() {
   if (BT.available() > 0) {
     command = "";//see program BT_receiving_Commands
@@ -36,7 +36,9 @@ void receiveData() {
   }
   if (!command.equals("")) {//if command doesn't equal nothing
     String lastFourData = command.substring(command.length() - 4);//the last 4 letters of the command
-    Serial.println(lastFourData);//prints the last 4 chars of the command
+    if (DEBUG) {
+      Serial.println(lastFourData);//prints the last 4 chars of the command
+    }
     interpretCommand(lastFourData);
     command = "";//reset command to be an empty String
   }
@@ -47,13 +49,15 @@ void interpretCommand (String dataBT) {
 
   //debugging with LED
   if (dataBT.equals("_OFF")) {
-        digitalWrite(testLed, LOW);
+    digitalWrite(testLed, LOW);
   }
 
-    //debugging with LED
+  //debugging with LED
   if (dataBT.equals("__ON")) {
     digitalWrite(testLed, HIGH);
-    BT.write("AON");
+    BT.write("AON~");//for debugging / displaying data to android attempt
+    BT.print("AON~");//debug
+    Serial.println("android should say AON~");//debug, 12/29 added ~ to mark the end of the message
   }
   //sets trigger state to 1, which is ON
   else if (dataBT.equals("GT01")) {
@@ -69,7 +73,11 @@ void interpretCommand (String dataBT) {
   else if (dataBT.equals("GT02")) {
     triggerState = 2;
   }
-  
+
+  else if (dataBT.equals("GDCT")) {//When disconnected
+    setupSwitch = false;
+  }
+
   // if L is the first character of the command, set the moduleIndex to 0 so the microcontroller is using the light sensor, and parses rest of data for the lightInterpret to use.
   else if (dataBT.charAt(0) == 'L') {
     moduleIndex = 0;

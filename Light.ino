@@ -25,18 +25,24 @@ void printLightData() {
   Serial.println (" ");
 }
 void lightSwitch() {
-  delay(500);// for debugging to read data
+  delay(500);// for debugging to read data TODO: see if this is needed
   printLightData();//for debugging
-
-  if (getLightData() < lightThresh && !relayState) {
-    openRelay();
-    Serial.println("It's bright");//debugging
-
+  int currentLightVal = getLightData();
+  if (currentLightVal < lightThresh) {
+    if (!relayState) {
+      openRelay();
+    }
+    if (DEBUG) {
+      Serial.println("It's bright! Light value: " + currentLightVal);
+    }
   }
-  else if (getLightData() >= lightThresh && relayState) {
-    closeRelay(); //open and closed must be closed might be reversed
-    Serial.println("It's dark");//debugging
-
+  else {// if currentLightVal >= lightThresh
+    if (relayState) {
+      closeRelay(); //open and closed must be closed might be reversed
+    }
+    if (DEBUG) {
+      Serial.println("It's dark! Light value: " + currentLightVal);
+    }
   }
 }
 
