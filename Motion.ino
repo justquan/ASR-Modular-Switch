@@ -28,13 +28,14 @@ void printMotionData(){
   else{
     Serial.println("No motion");
   }
-  delay(300);
+ // delay(300);
 }
 
 void motionSwitch(){
+  printMotionData();
   if (isMotion){
     closeRelay();
-    delay(motionDelay);//Not the best bethod because everything else stops when there's a delay, need to change, use timer instead so switch can still sense for data and use other functions
+    //delay(motionDelay);//Not the best bethod because everything else stops when there's a delay, need to change, use timer instead so switch can still sense for data and use other functions
   }
   else{
     openRelay();
