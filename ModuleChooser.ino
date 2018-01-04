@@ -116,3 +116,12 @@ void interpretCommand (String dataBT) {
   }
 }
 
+long convertCommandToLong(String stringCommand) {
+  int longCommand;
+  while (stringCommand.indexOf("_") != -1) {
+    stringCommand = stringCommand.substring(stringCommand.indexOf("_") + 1);//the stringCommand is equal to the string with the first "_" removed
+  }
+  longCommand = stringCommand.toInt();
+  return longCommand;
+}
+

@@ -4,7 +4,7 @@
 #include "EEPROMAnything.h"
 
 
-boolean relayState = false; //If false, relay is closed; if true, relay is open
+boolean relayState = true; //If false, relay is closed; if true, relay is open
 int triggerState = 1; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
 
 //Pins
@@ -24,7 +24,7 @@ decode_results results;
 //setting variables
 int lightThresh = 500; //threshold value for light sensor, a LOWER value means there is more light
 double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
-int motionDelay = 60000; //time in milliseconds that the switch is closed after motion is detected until the sensing again
+unsigned long motionInterval = 20000; // default time in milliseconds that the switch is closed after motion is detected until the sensing again
 
 //Scaling constants
 const double tempConversion = .48828125; //constant for lm35 sensor
@@ -35,9 +35,10 @@ const double tempConversion = .48828125; //constant for lm35 sensor
 SoftwareSerial BT(10, 11); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
 String command = ""; //placeholder string for bluetooth data
 
-//timer in milliseconds
-boolean setupSwitch = true;//boolean to have bluetooth connection open for setting up the switch, TODO: implement a timer or some type of system for only receiving data from the Android at the beginning for a certain amount of time.
-int timer;
+//stores last time motion was detected and not in the triggered not sensing state
+unsigned long previousMotionMillis = 0;
+
+boolean setupSwitch = true;//boolean to have bluetooth connection open for setting up the switch
 
 int moduleIndex = -1; //index variable determining which sensor is being used
 

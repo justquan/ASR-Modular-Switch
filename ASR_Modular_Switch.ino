@@ -13,7 +13,6 @@ void setup() {
   irrecv.enableIRIn(); // Start the ir receiver
   // Send test message to other device
   //BT.println("Hello from Arduino");
-  timer = 0;
 
   if (DEBUG) {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -24,6 +23,7 @@ void setup() {
 }
 
 void loop() {
+  //Serial.println(millis());
   //manualBTSensorChooser();
   if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
@@ -31,6 +31,9 @@ void loop() {
   else {
     sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
   }
+  //moduleIndex = 3;//for testing pir stuff
+  //sensorChooser();
+
 }
 
 

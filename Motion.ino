@@ -8,37 +8,48 @@
 //Right Pin: GND
 
 //receives the three char command from the interpretCommand(), and makes sense of it
-void motionInterpret(String filteredData) {
-
+void motionInterpret(String filteredData) {//TODO: add ability to change motionInterval based on number from the android app
+  //assuming that the received data is an integer in a string form
+  motionInterval = convertCommandToLong(filteredData) * 1000;//The last three numbers are multipied by 1000 and set to the motionInterval, so if a value of 60 is received by example, 
+  if(DEBUG) {
+    Serial.println("Motion Interval has been set to " + String(motionInterval));//String(motionInterval) to make the int a String for displaying
+  }
 }
 
-boolean isMotion(){
-  if(digitalRead(pirPin) == HIGH){
+boolean isMotion() {
+  if (digitalRead(pirPin) == HIGH) {
     return true;
   }
-  else{
+  else {
     return false;
   }
 }
 
-void printMotionData(){
-  if(isMotion()){
+void printMotionData() {
+  if (isMotion()) {
     Serial.println("Motion detected!");
   }
-  else{
+  else {
     Serial.println("No motion");
   }
- // delay(300);
+  // delay(300);
 }
 
-void motionSwitch(){
-  printMotionData();
-  if (isMotion){
-    closeRelay();
-    //delay(motionDelay);//Not the best bethod because everything else stops when there's a delay, need to change, use timer instead so switch can still sense for data and use other functions
+void motionSwitch() {
+  if (DEBUG) {
+    //printMotionData();
   }
-  else{
-    openRelay();
+  
+  unsigned long currentTime = millis(); //sets currentTime to the current time in seconds according to the Arduino's crystal
+
+  if (currentTime - previousMotionMillis >= motionInterval) {//if the difference between the current time and the last time the motion sensor was triggered is greater than the interval set by the user, the Arduino resumes "listening" for motion.
+    if (isMotion()) {
+      closeRelay();
+      previousMotionMillis = currentTime;
+    }
+    else {
+      openRelay();
+    }
   }
 }
 
