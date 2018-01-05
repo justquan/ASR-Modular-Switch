@@ -23,17 +23,26 @@ void setup() {
 }
 
 void loop() {
-  //Serial.println(millis());
-  //manualBTSensorChooser();
-  if (setupSwitch) { //if the switch is in the setup mode
+  /*
+    if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
-  }
-  else {
+    }
+    else {
     sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
-  }
+    }*/
   //moduleIndex = 3;//for testing pir stuff
   //sensorChooser();
+  //Serial.println(analogRead(0));
+  //Serial.println(digitalRead(3));
+  //delay(100);
 
+  //for testing sound sensor code
+  volumeInterpret("__7");
+  moduleIndex = 5;
+  while(true) {
+    sensorChooser();
+  }
+  
 }
 
 

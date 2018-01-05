@@ -13,6 +13,7 @@ int relayPin = 1; //D1, digital pin for relay control
 int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
 int pirPin = 3; //D3, digital pin for Passive Infrared (PIR) sensor
 int tempPin = 2; // A2, analog pin for temperature sensor
+int volPin = 0; //A0, analog pin for sound sensor
 int IRpin = 9;  // D9, digital pin for IR sensor
 int BTTX = 10; //D10, connect TX pin from BT module to this pin
 int BTRX = 11; //D11, connect RX pin from Bt module to this pin
@@ -57,3 +58,6 @@ unsigned long storedCode;//int or unsigned long?
 boolean DEBUG = true;
 
 boolean saveIR = false; //determines if switch is in save mode or not for the IR sensor
+
+int normalVolume = -1; //saves the value from the sound sensor module at normal levels
+int soundDifference = 2; //saves the difference from normalValue needed to register as a sound loud enough to trigger the switch

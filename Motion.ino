@@ -37,7 +37,7 @@ void printMotionData() {
 
 void motionSwitch() {
   if (DEBUG) {
-    //printMotionData();
+    printMotionData();
   }
   
   unsigned long currentTime = millis(); //sets currentTime to the current time in seconds according to the Arduino's crystal
