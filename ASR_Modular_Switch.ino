@@ -9,11 +9,10 @@ void setup() {
   pinMode(pirPin, INPUT);
   pinMode(relayPin, OUTPUT);
   pinMode(testLed, OUTPUT);//debug
-
+  //digitalWrite(testLed, HIGH);
   irrecv.enableIRIn(); // Start the ir receiver
   // Send test message to other device
   //BT.println("Hello from Arduino");
-
   if (DEBUG) {
     pinMode(LED_BUILTIN, OUTPUT);
   }
@@ -37,12 +36,14 @@ void loop() {
   //delay(100);
 
   //for testing sound sensor code
-  volumeInterpret("__7");
-  moduleIndex = 5;
-  while(true) {
-    sensorChooser();
-  }
-  
+//  volumeInterpret("__8");
+//  moduleIndex = 5;
+//  while(true) {
+//    sensorChooser();
+//  }
+  //Serial.println(getVolumeAnalog());
+  //delay(100);
+ 
 }
 
 

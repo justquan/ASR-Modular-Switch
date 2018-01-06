@@ -6,7 +6,8 @@ void closeRelay() {
     digitalWrite(relayPin, HIGH);
     relayState = false;
     if (DEBUG) {
-      Serial.println("Relay closed");
+      Serial.println("RELAY CLOSED");
+      digitalWrite(testLed, HIGH); //using debugging led
     }
   }
 }
@@ -18,7 +19,8 @@ void openRelay() {
     digitalWrite(relayPin, LOW);
     relayState = true;
     if (DEBUG) {
-      Serial.println("Relay open");
+      Serial.println("RELAY OPEN");
+      digitalWrite(testLed, LOW);//using debugging led
     }
   }
 }
