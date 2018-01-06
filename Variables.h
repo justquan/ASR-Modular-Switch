@@ -9,7 +9,7 @@ int triggerState = 1; //If 0, relay is closed; if 1, relay is open; if 2, relay 
 
 //Pins
 int testLed = 5; //D5, for debugging
-int relayPin = 1; //D1, digital pin for relay control
+int relayPin = 2; //D2, digital pin for relay control
 int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
 int pirPin = 3; //D3, digital pin for Passive Infrared (PIR) sensor
 int tempPin = 2; // A2, analog pin for temperature sensor
@@ -17,7 +17,7 @@ int volPin = 0; //A0, analog pin for sound sensor
 int IRpin = 9;  // D9, digital pin for IR sensor
 int BTTX = 10; //D10, connect TX pin from BT module to this pin
 int BTRX = 11; //D11, connect RX pin from Bt module to this pin
-int btPowerBasePin = 7; //D7, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06.
+int btPowerBasePin = 8; //D7, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06.
 
 //Variables from public ir library
 IRrecv irrecv(IRpin);

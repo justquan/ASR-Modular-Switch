@@ -14,8 +14,8 @@ void volumeInterpret(String filteredData) {
 }
 //TODO: implement two clap feature
 void soundSwitch() {
-  oneClapToggle();
-  //twoClapToggle();
+  //oneClapToggle();
+  twoClapToggle();
 }
 
 void oneClapToggle() {
@@ -37,7 +37,7 @@ void oneClapToggle() {
     //delay is to avoid debouncing, the switch shouldn't listen to data right after it receives triggering data
   }
 }
-  boolean oddTime = true;//for debugging
+//  boolean oddTime = true;//for debugging
 
 void twoClapToggle() {
   boolean triggered = false;
@@ -74,13 +74,13 @@ void twoClapToggle() {
           reverseRelay();
           triggered = true;
           delay(triggerDelay);
-          if(oddTime) {
-            normalVolume += 10;//This is necessary when testing with a test LED or any change in energy, since when an LED is connected, the valeus change!
-          }
-          else {
-            normalVolume -= 10;
-          }
-          oddTime = !oddTime;//for debugging
+//          if(oddTime) {
+//            normalVolume += 10;//This is necessary when testing with a test LED or any change in energy, since when an LED is connected, the valeus change!
+//          }
+//          else {
+//            normalVolume -= 10;
+//          }
+//          oddTime = !oddTime;//for debugging
         }
       }
     }

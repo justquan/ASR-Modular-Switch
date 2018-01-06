@@ -37,17 +37,15 @@ void loop() {
   //delay(100);
 
   //for testing sound sensor code
-//  volumeInterpret("__8");
-//  moduleIndex = 5;
-//  while(true) {
-//    sensorChooser();
-//  }
+  btPowerOff();
+  volumeInterpret("__8");
+  moduleIndex = 5;
+  while(true) {
+    sensorChooser();
+  }
   //Serial.println(getVolumeAnalog());
   //delay(100);
- btPowerOff();
- //delay(2000);
- //btPowerOn();
- //delay(2000);
+
 }
 
 
