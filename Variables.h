@@ -17,6 +17,7 @@ int volPin = 0; //A0, analog pin for sound sensor
 int IRpin = 9;  // D9, digital pin for IR sensor
 int BTTX = 10; //D10, connect TX pin from BT module to this pin
 int BTRX = 11; //D11, connect RX pin from Bt module to this pin
+int btPowerBasePin = 7; //D7, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06.
 
 //Variables from public ir library
 IRrecv irrecv(IRpin);
