@@ -2,9 +2,9 @@
 //Close relay (connection is made) and changes relayState to false to match its status.
 //First checks to make sure a change must be made in the state of the relay.
 void closeRelay() {
-  if (relayState) {
+  if (!relayClosed) {
     digitalWrite(relayPin, HIGH);
-    relayState = false;
+    relayClosed = true;
     if (DEBUG) {
       Serial.println("RELAY CLOSED");
       digitalWrite(testLed, HIGH); //using debugging led
@@ -15,9 +15,9 @@ void closeRelay() {
 //Open relay (connection is broken) and changes relayState to true to match its status
 //First checks to make sure a change must be made in the state of the relay.
 void openRelay() {
-  if (!relayState) {
+  if (relayClosed) {
     digitalWrite(relayPin, LOW);
-    relayState = true;
+    relayClosed = false;
     if (DEBUG) {
       Serial.println("RELAY OPEN");
       digitalWrite(testLed, LOW);//using debugging led
@@ -27,7 +27,7 @@ void openRelay() {
 
 //Function for reversing relay state. If relayState is true (open), close the relay, and if the relayState is false (closed), open the relay.
 void reverseRelay() {
-  if (relayState) {
+  if (!relayClosed) {
     closeRelay();
   }
   else {
@@ -35,3 +35,35 @@ void reverseRelay() {
   }
 }
 
+void trigger() {
+  if (strobeIfTriggered) {
+    if (!strobing) {
+      strobing = true;
+    }
+  }
+  else {
+    if (strobing) {
+      strobing = false;
+    }
+    if (triggerStateIsClose) {
+      closeRelay();
+    }
+    else {
+      openRelay();
+    }
+  }
+}
+
+//for when the switch is not triggered
+//currently no way to strobe while dormant
+void dormant() {
+  if(strobing) {
+    strobing = false;
+  }
+  if (triggerStateIsClose) {
+    openRelay();
+  }
+  else {
+    closeRelay();
+  }
+}

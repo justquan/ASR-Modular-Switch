@@ -44,11 +44,11 @@ void motionSwitch() {
 
   if (currentTime - previousMotionMillis >= motionInterval) {//if the difference between the current time and the last time the motion sensor was triggered is greater than the interval set by the user, the Arduino resumes "listening" for motion.
     if (isMotion()) {
-      closeRelay();
+      trigger();
       previousMotionMillis = currentTime;
     }
     else {
-      openRelay();
+      dormant();
     }
   }
 }

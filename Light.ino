@@ -29,17 +29,13 @@ void lightSwitch() {
   printLightData();//for debugging
   int currentLightVal = getLightData();
   if (currentLightVal < lightThresh) {
-    if (!relayState) {
-      openRelay();
-    }
+    dormant();
     if (DEBUG) {
       Serial.println("It's bright! Light value: " + currentLightVal);
     }
   }
   else {// if currentLightVal >= lightThresh
-    if (relayState) {
-      closeRelay(); //open and closed must be closed might be reversed
-    }
+    trigger();
     if (DEBUG) {
       Serial.println("It's dark! Light value: " + currentLightVal);
     }

@@ -1,6 +1,7 @@
 #include "Variables.h" //File with my global variables
 
 void setup() {
+  btPowerOn();
   Serial.begin(9600); //baud rate of 9600
   BT.begin(9600);
 
@@ -23,13 +24,13 @@ void setup() {
 }
 
 void loop() {
-  /*
-    if (setupSwitch) { //if the switch is in the setup mode
+
+  if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
-    }
-    else {
+  }
+  else {
     sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
-    }*/
+  }
   //moduleIndex = 3;//for testing pir stuff
   //sensorChooser();
   //Serial.println(analogRead(0));
@@ -37,19 +38,31 @@ void loop() {
   //delay(100);
 
   //for testing sound sensor code
-  btPowerOff();
-  volumeInterpret("__8");
-  moduleIndex = 5;
-  while(true) {
-    sensorChooser();
-  }
+  //btPowerOff();
+  //  volumeInterpret("__8");
+  //  moduleIndex = 5;
+  //  while(true) {
+  //    sensorChooser();
+  //  }
   //Serial.println(getVolumeAnalog());
   //delay(100);
 
+  //relay being turned on and off + onboard LEDs disrupts analog signal of the sound sensor
+
+  checkStrobe();
 }
 
 
-
+//checks if switch should be strobbing, and strobes it if it should
+void checkStrobe() {
+  if (strobing) {
+    unsigned long currentTime = millis();
+    if (currentTime - lastStrobeTime >= strobeInterval) {
+      lastStrobeTime = currentTime;
+      reverseRelay();
+    }
+  }
+}
 
 
 //disconnect GND to HC-06 bt module by sending no power to the base pin of the NPN transistor

@@ -4,8 +4,8 @@
 #include "EEPROMAnything.h"
 
 
-boolean relayState = true; //If false, relay is closed; if true, relay is open
-int triggerState = 1; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
+boolean relayClosed = false; //If false, relay is open (off); if true, relay is closed (on)
+boolean triggerStateIsClose = true; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
 
 //Pins
 int testLed = 5; //D5, for debugging
@@ -62,3 +62,10 @@ boolean saveIR = false; //determines if switch is in save mode or not for the IR
 
 int normalVolume = -1; //saves the value from the sound sensor module at normal levels
 int soundDifference = 2; //saves the difference from normalValue needed to register as a sound loud enough to trigger the switch
+
+boolean strobing = false;//determines if the switch should be strobbing
+boolean strobeIfTriggered = false;//determines whether or not switch should strobe if triggered
+unsigned long strobeInterval = 1000; //the length of time in ms for how long the relay should stay remain in a state before switching during strobbing
+unsigned long lastStrobeTime; //to track last time reversed for strobbing
+
+boolean firstSensorCall = true;

@@ -48,34 +48,42 @@ void receiveData() {
 //to interpret the 4 character String received as data via BT
 void interpretCommand (String dataBT) {
 
-  //debugging with LED
-  if (dataBT.equals("_OFF")) {
-    digitalWrite(testLed, LOW);
+  if (dataBT.equals("GOFF")) {
+    //    digitalWrite(testLed, LOW);
+    openRelay();
   }
 
   //debugging with LED
-  if (dataBT.equals("__ON")) {
-    digitalWrite(testLed, HIGH);
-    BT.write("AON~");//for debugging / displaying data to android attempt
-    BT.print("AON~");//debug
-    Serial.println("android should say AON~");//debug, 12/29 added ~ to mark the end of the message
+  if (dataBT.equals("G_ON")) {
+    //    digitalWrite(testLed, HIGH);
+    //    BT.write("AON~");//for debugging / displaying data to android attempt
+    //    BT.print("AON~");//debug
+    //    Serial.println("android should say AON~");//debug, 12/29 added ~ to mark the end of the message
+    closeRelay();
   }
-  //sets trigger state to 1, which is ON
+  //sets triggerStateClosed to true, so when triggered, it closes the relay
   else if (dataBT.equals("GT01")) {
-    triggerState = 1;
+    triggerStateIsClose = true;
   }
 
-  //sets trigger state to 0 , which is OFF
+  //sets triggerStateClosed to false, so when triggered, it opens the relay
   else if (dataBT.equals("GT00")) {
-    triggerState = 0;
+    triggerStateIsClose = false;
   }
 
-  //sets trigger state to 2, which is STROBE
-  else if (dataBT.equals("GT02")) {
-    triggerState = 2;
+  //if receives yes strobe command, then set strobeIfTriggered to true
+  else if (dataBT.equals("GYSB")) {
+    strobeIfTriggered = true;//TODO: Add strobing feature. Harder than I thought TODO: implement strobe
+  }
+
+  //if receives no strobe command, then set strobeIfTriggered to false
+  else if (dataBT.equals("GNSB")) {
+    strobeIfTriggered = false;//
   }
 
   else if (dataBT.equals("GDCT")) {//When disconnected
+    btPowerOff();
+    delay(1000);//gives time to turn off to prevent interference in analog signals
     setupSwitch = false;
   }
 

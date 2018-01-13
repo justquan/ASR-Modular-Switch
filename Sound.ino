@@ -4,7 +4,7 @@
 //receives the three char command from the interpretCommand(), and makes sense of it
 void volumeInterpret(String filteredData) {
   //assuming it is an integer 1-10
-  setNormalVolume();
+  //setNormalVolume();//interference from bt module if here
   soundDifference = (int)convertCommandToLong(filteredData);
   if (DEBUG) {
     Serial.println("Sound Difference value is set to ");
@@ -12,9 +12,14 @@ void volumeInterpret(String filteredData) {
     Serial.println();
   }
 }
-//TODO: implement two clap feature
+
 void soundSwitch() {
+  if(firstSensorCall) {
+    setNormalVolume();
+    firstSensorCall = false;
+  }
   //oneClapToggle();
+  
   twoClapToggle();
 }
 
