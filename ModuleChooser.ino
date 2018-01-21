@@ -20,8 +20,10 @@ void sensorChooser() {//when the switch is not in setup mode, this method is cal
   }
 
   else if (moduleIndex == 6) {
-    temperatureSwitch();
+//    temperatureSwitch();
+      dhtSwitch();//switched out temperature with dht
   }
+
 
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
 }
@@ -120,7 +122,8 @@ void interpretCommand (String dataBT) {
   // if T is the first character of the command, set the moduleIndex to 5 so the microcontroller is using the temperature sensor, and parses rest of data for the temperatureInterpreter to use.
   else if (dataBT.charAt(0) == 'T') {
     moduleIndex = 6;
-    temperatureInterpret(dataBT.substring(1));
+    dhtInterpret(dataBT.substring(1));//replaces temperature with dht here
+ //   temperatureInterpret(dataBT.substring(1));
   }
 }
 

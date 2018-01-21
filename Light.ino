@@ -24,9 +24,10 @@ void printLightData() {
   Serial.println(getLightData());
   Serial.println (" ");
 }
+
 void lightSwitch() {
-  delay(500);// for debugging to read data TODO: see if this is needed
-  printLightData();//for debugging
+  //  delay(500);// for debugging to read data TODO: see if this is needed
+  //  printLightData();//for debugging
   int currentLightVal = getLightData();
   if (currentLightVal < lightThresh) {
     dormant();

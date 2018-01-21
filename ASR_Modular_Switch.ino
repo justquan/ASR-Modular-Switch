@@ -25,12 +25,14 @@ void setup() {
 
 void loop() {
 
-  if (setupSwitch) { //if the switch is in the setup mode
-    receiveData();//then receive data from the Android
-  }
-  else {
-    sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
-  }
+dhtSwitch();
+//  if (setupSwitch) { //if the switch is in the setup mode
+//    receiveData();//then receive data from the Android
+//  }
+//  else {
+//    sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
+//    checkStrobe();
+//  }
   //moduleIndex = 3;//for testing pir stuff
   //sensorChooser();
   //Serial.println(analogRead(0));
@@ -49,21 +51,7 @@ void loop() {
 
   //relay being turned on and off + onboard LEDs disrupts analog signal of the sound sensor
 
-  checkStrobe();
 }
-
-
-//checks if switch should be strobbing, and strobes it if it should
-void checkStrobe() {
-  if (strobing) {
-    unsigned long currentTime = millis();
-    if (currentTime - lastStrobeTime >= strobeInterval) {
-      lastStrobeTime = currentTime;
-      reverseRelay();
-    }
-  }
-}
-
 
 //disconnect GND to HC-06 bt module by sending no power to the base pin of the NPN transistor
 void btPowerOff() {

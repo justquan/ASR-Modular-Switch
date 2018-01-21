@@ -2,6 +2,7 @@
 #include <SoftwareSerial.h> //Needed for bluetooth serial data from wireless UART adaptor
 #include <EEPROM.h> //for long term variables with saved values
 #include "EEPROMAnything.h"
+#include "DHT.h"//library by markruys for the dht22
 
 
 boolean relayClosed = false; //If false, relay is open (off); if true, relay is closed (on)
@@ -13,11 +14,13 @@ int relayPin = 2; //D2, digital pin for relay control
 int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
 int pirPin = 3; //D3, digital pin for Passive Infrared (PIR) sensor
 int tempPin = 2; // A2, analog pin for temperature sensor
+int dhtPin = 3; //D3, digital pin for the DHT temperature and humidity module
 int volPin = 0; //A0, analog pin for sound sensor
 int IRpin = 9;  // D9, digital pin for IR sensor
 int BTTX = 10; //D10, connect TX pin from BT module to this pin
 int BTRX = 11; //D11, connect RX pin from Bt module to this pin
 int btPowerBasePin = 8; //D7, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06.
+
 
 //Variables from public ir library
 IRrecv irrecv(IRpin);
@@ -69,3 +72,5 @@ unsigned long strobeInterval = 1000; //the length of time in ms for how long the
 unsigned long lastStrobeTime; //to track last time reversed for strobbing
 
 boolean firstSensorCall = true;
+
+DHT dht;

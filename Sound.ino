@@ -1,5 +1,6 @@
 //Note: When looking at analog sound values, a lower number means higher volume.
 //When using sound modules like the KY-038, the analog value changes when there are other energy consuming components connected,like LEDS.
+//Note: strobe not implemented with sound sensor, which toggles relay state
 
 //receives the three char command from the interpretCommand(), and makes sense of it
 void volumeInterpret(String filteredData) {

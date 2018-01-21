@@ -57,7 +57,7 @@ void trigger() {
 //for when the switch is not triggered
 //currently no way to strobe while dormant
 void dormant() {
-  if(strobing) {
+  if (strobing) {
     strobing = false;
   }
   if (triggerStateIsClose) {
@@ -65,5 +65,16 @@ void dormant() {
   }
   else {
     closeRelay();
+  }
+}
+
+//checks if switch should be strobbing, and strobes it if it should in the main void loop()
+void checkStrobe() {
+  if (strobing) {
+    unsigned long currentTime = millis();//TODO: use milliselapsed instead and do this for the pir interval
+    if (currentTime - lastStrobeTime >= strobeInterval) {
+      lastStrobeTime = currentTime;
+      reverseRelay();
+    }
   }
 }
