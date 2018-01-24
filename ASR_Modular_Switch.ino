@@ -25,19 +25,21 @@ void setup() {
 
 void loop() {
 
-dhtSwitch();
-//  if (setupSwitch) { //if the switch is in the setup mode
-//    receiveData();//then receive data from the Android
-//  }
-//  else {
-//    sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
-//    checkStrobe();
-//  }
+//dhtSwitch();
+  if (setupSwitch) { //if the switch is in the setup mode
+    receiveData();//then receive data from the Android
+  }
+  else {
+    if(!strobing) {//so once the switch is strobing, it is strobing forever until reset
+          sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
+    }
+    checkStrobe();
+  }
   //moduleIndex = 3;//for testing pir stuff
   //sensorChooser();
   //Serial.println(analogRead(0));
   //Serial.println(digitalRead(3));
-  //delay(100);
+  //delay(100);h
 
   //for testing sound sensor code
   //btPowerOff();
@@ -63,7 +65,6 @@ void btPowerOn() {
   digitalWrite(btPowerBasePin, HIGH);
 }
 
-
 void clearEEPROM() { //for testing, to clear all EEPROM data
   for (int i = 0 ; i < EEPROM.length() ; i++) {
     EEPROM.write(i, 0);
@@ -85,6 +86,3 @@ void printAllEEPROMAnything() {
     Serial.println(temp);
   }
 }
-
-
-

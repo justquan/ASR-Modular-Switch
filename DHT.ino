@@ -5,7 +5,12 @@
 
 //receives the three char command from the interpretCommand(), and makes sense of it
 void dhtInterpret(String filteredData) {
-
+  if (DEBUG) {
+    Serial.println("Threshold temperature in Fahrenheit set to ");
+    Serial.print(tempThreshF);
+    Serial.println();
+  }
+  tempThreshF = filteredData.toInt();
 }
 
 void dhtSwitch() {
@@ -16,9 +21,19 @@ void dhtSwitch() {
   if (DEBUG) {
     exampleDHTPrint();
   }
+  float currentTemp = dht.getTemperature();
+  String dhtStatus = dht.getStatusString();
+  if (dhtStatus.equals("OK")) {
+    if (currentTemp >= tempThreshF) {
+      trigger();
+    }
+    else {
+      dormant();
+    }
+  }
+  delay(dht.getMinimumSamplingPeriod());
 }
 
-//
 void exampleDHTPrint() {
   delay(dht.getMinimumSamplingPeriod());
 
