@@ -21,6 +21,8 @@ void setup() {
   //EEPROM_readAnything(0, storedCode);//reads whatever is at spot 0 in EEPROM and assigns value to storedCode
   //Serial.println(storedCode);//debug
   //printAllEEPROMAnything();
+ // dht.setup(3);//when testing without bt app
+
 }
 
 void loop() {
