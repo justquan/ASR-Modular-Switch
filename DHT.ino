@@ -25,7 +25,7 @@ void dhtSwitch() {//TODO: make it so that there's a range, and option so that if
   float currentTempC = dht.getTemperature();
   float currentTempF = dht.toFahrenheit(currentTempC);
   String dhtStatus = dht.getStatusString();
-  if (dhtStatus.equals("OK")) {//ignore bad or not-a-number data from the library //TODO: debug and check this
+  if (dhtStatus.equals("OK")) {//ignore bad or not-a-number (nan) data from the library //TODO: debug and check this
     if (currentTempF >= tempThreshF) {
       trigger();
     }

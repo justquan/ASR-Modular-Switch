@@ -13,6 +13,8 @@ void motionInterpret(String filteredData) {//TODO: add ability to change motionI
   motionInterval = convertCommandToLong(filteredData) * 1000;//The last three numbers are multipied by 1000 and set to the motionInterval, so if a value of 60 is received by example, 
   if(DEBUG) {
     Serial.println("Motion Interval has been set to " + String(motionInterval));//String(motionInterval) to make the int a String for displaying
+//    String x = String(motionInterval);
+    BT.print(motionInterval);//for debugging / testing android handler, use print instead of write for full strings. ISSUE: for some reason, on app, only display a portion of the numbers sent. Maybe not fasat enough.
   }
 }
 
