@@ -9,7 +9,7 @@ boolean relayClosed = false; //If false, relay is open (off); if true, relay is 
 boolean triggerStateIsClose = true; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
 
 //Pins
-int testLed = 5; //D5, for debugging
+int testLed = 12; //D5, for debugging
 int relayPin = 2; //D2, digital pin for relay control
 int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
 int pirPin = 3; //D3, digital pin for Passive Infrared (PIR) sensor
@@ -17,8 +17,8 @@ int tempPin = 2; // A2, analog pin for temperature sensor
 int dhtPin = 3; //D3, digital pin for the DHT temperature and humidity module
 int volPin = 0; //A0, analog pin for sound sensor
 int IRpin = 9;  // D9, digital pin for IR sensor
-int BTTX = 10; //D10, connect TX pin from BT module to this pin
-int BTRX = 11; //D11, connect RX pin from Bt module to this pin
+int BTTX = 5; //D10, connect TX pin from BT module to this pin
+int BTRX = 6; //D11, connect RX pin from Bt module to this pin
 int btPowerBasePin = 8; //D7, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06.
 
 
@@ -37,7 +37,7 @@ const double tempConversion = .48828125; //constant for lm35 sensor
 //index variables
 
 //bluetooth variables
-SoftwareSerial BT(10, 11); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
+SoftwareSerial BT(BTTX, BTRX); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
 String command = ""; //placeholder string for bluetooth data
 
 //stores last time motion was detected and not in the triggered not sensing state
