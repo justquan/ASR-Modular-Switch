@@ -1,6 +1,6 @@
 //DHT module board pinout (white block facing you):
 // VCC+ (3.3V - 6V power range)
-// OUT (Digital pin), set up in dhtSwitch()
+// OUT (Digital pin), which is set up in dhtSwitch()
 // GND
 
 //receives the three char command from the interpretCommand(), and makes sense of it
