@@ -1,8 +1,9 @@
 #include "Variables.h" //File with my global variables
 
 void setup() {
-  btPowerOn();
-  Serial.begin(9600); //baud rate of 9600
+
+  btPowerOn();  //When switch is rebooted, power flows to the HC-06 bluetooth module.
+  Serial.begin(9600); //baud rate of 900
   BT.begin(9600);
 
   //setting pin modes
@@ -21,19 +22,27 @@ void setup() {
   //EEPROM_readAnything(0, storedCode);//reads whatever is at spot 0 in EEPROM and assigns value to storedCode
   //Serial.println(storedCode);//debug
   //printAllEEPROMAnything();
- // dht.setup(3);//when testing without bt app
-
+  // dht.setup(3);//when testing without bt app
+  delay(2000);
+  setNormalVolume();
+  soundDifference = 5;
+  //  btPowerOff();
+  closeRelay();
+  timeElapsed = 0; //reset time
 }
-
 void loop() {
+  //  closeRelay();
+  //  Serial.println("Analog volume value: ");
+  //  Serial.println(getVolumeAnalog());
+  //  delay(200);
 
-//dhtSwitch();
+  //dhtSwitch();
   if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
   }
   else {
-    if(!strobing) {//so once the switch is strobing, it is strobing forever until reset
-          sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
+    if (!strobing) { //so once the switch is strobing, it is strobing forever until reset
+      sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
     }
     checkStrobe();
   }
@@ -56,6 +65,7 @@ void loop() {
   //relay being turned on and off + onboard LEDs disrupts analog signal of the sound sensor
 
 }
+
 
 //disconnect GND to HC-06 bt module by sending no power to the base pin of the NPN transistor
 void btPowerOff() {

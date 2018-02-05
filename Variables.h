@@ -3,7 +3,7 @@
 #include <EEPROM.h> //for long term variables with saved values
 #include "EEPROMAnything.h"
 #include "DHT.h"//library by markruys for the dht22
-
+#include <elapsedMillis.h> // arduino library for elapsed time
 
 boolean relayClosed = false; //If false, relay is open (off); if true, relay is closed (on)
 boolean triggerStateIsClose = true; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
@@ -74,3 +74,11 @@ unsigned long lastStrobeTime; //to track last time reversed for strobbing
 boolean firstSensorCall = true;
 
 DHT dht;
+int dhtSamplingPeriod = dht.getMinimumSamplingPeriod();
+
+//elapsedMillis is a long, so theoretically 49.7 days before rolling over
+elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0. Important: Only use this variable for one thing at a time. This can be used across multiple sensors, but only if the sensors are being used one at a time.
+
+
+//int previousTimeE = 0; //not needed with time elapsed
+

@@ -43,16 +43,26 @@ void motionSwitch() {
     printMotionData();
   }
 
-  unsigned long currentTime = millis(); //sets currentTime to the current time in seconds according to the Arduino's crystal
-
-  if (currentTime - previousMotionMillis >= motionInterval) {//if the difference between the current time and the last time the motion sensor was triggered is greater than the interval set by the user, the Arduino resumes "listening" for motion.
+  if (timeElapsed >= motionInterval) {
     if (isMotion()) {
       trigger();
-      previousMotionMillis = currentTime;
+      timeElapsed = 0;
     }
     else {
       dormant();
     }
   }
+
+  //Old code for dela, didn't used timeElapsed
+  //  unsigned long currentTime = millis(); //sets currentTime to the current time in seconds according to the Arduino's crystal
+  //  if (currentTime - previousMotionMillis >= motionInterval) {//if the difference between the current time and the last time the motion sensor was triggered is greater than the interval set by the user, the Arduino resumes "listening" for motion.
+  //    if (isMotion()) {
+  //      trigger();
+  //      previousMotionMillis = currentTime;
+  //    }
+  //    else {
+  //      dormant();
+  //    }
+  //  }
 }
 

@@ -2,6 +2,7 @@
 //When using sound modules like the KY-038, the analog value changes when there are other energy consuming components connected,like LEDS.
 //Note: strobe not implemented with sound sensor, which toggles relay state
 
+//TODO: instead of delays, possibly use timeElapsed for clap detection
 //receives the three char command from the interpretCommand(), and makes sense of it
 void volumeInterpret(String filteredData) {
   //assuming it is an integer 1-10
@@ -61,7 +62,7 @@ void twoClapToggle() {
       Serial.println();
     }
     delay(firstWait);//NOT WORKING, TODO: FIX, ONLY WORKS THE FIRST TIME, THEN IT NEVER SENSES IF THE NORMAL VOLUME IS RANGE EVEN IF IT IS
-    if (abs(normalVolume - getVolumeAnalog()) <= 2) {
+    if (abs(normalVolume - getVolumeAnalog()) <= 2) {//error of 2, meaning that it won't work if the user selects 2 as the sensitivity on the app
       if (DEBUG) {
         Serial.println("The value of sound is within the range of normal.");
         Serial.println("Delaying for ");

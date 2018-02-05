@@ -4,6 +4,7 @@
 void temperatureInterpret(String filteredData) {
 
 }
+
 //converts current raw data into current temperature in Celcius and returns it
 double getTempC(){
   double temp = analogRead(tempPin);
