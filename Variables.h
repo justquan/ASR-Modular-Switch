@@ -79,6 +79,9 @@ int dhtSamplingPeriod = dht.getMinimumSamplingPeriod();
 //elapsedMillis is a long, so theoretically 49.7 days before rolling over
 elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0. Important: Only use this variable for one thing at a time. This can be used across multiple sensors, but only if the sensors are being used one at a time.
 
+//relay analog value offsets, because relay when on affects analog values
+int relayAnalogValOffsetSound = 5;//UNTESTED, NOT SURE IF 5
+int relayAnalogValOffsetLight = 5;//UNTESTED, NOT SURE IF 5
 
-//int previousTimeE = 0; //not needed with time elapsed
+
 

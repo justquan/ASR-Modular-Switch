@@ -16,12 +16,14 @@ void volumeInterpret(String filteredData) {
 }
 
 void soundSwitch() {
-  if(firstSensorCall) {
+  if (firstSensorCall) {
+    openRelay();//IMPORTANT: make sure relay is open / off, so that it is not consuming power and interfering with the sound sensor analog values
+    delay(100);//time for relay to open, if not open already
     setNormalVolume();
     firstSensorCall = false;
   }
-  //oneClapToggle();
-  
+  //oneClapToggle();TODO: Make it so that user can select one clap toggle or twoClapToggle.
+
   twoClapToggle();
 }
 
@@ -52,6 +54,10 @@ void twoClapToggle() {
   int secondWait = 500;
   int triggerDelay = 1000;//after triggering, how long it waits before sensing agian
   int firstVolume = getVolumeAnalog();
+  if (relayClosed) {
+    firstVolume += relayAnalogValOffsetSound;//to offset and neutralize the relay power interference if relay is powered / closed
+  }
+
   if (normalVolume - firstVolume >= soundDifference) {
     if (DEBUG) {
       Serial.println("The first peak value of the sound is ");
@@ -72,6 +78,11 @@ void twoClapToggle() {
       long currentTime = millis();
       while (millis() - currentTime <= secondWait && !triggered) {//TO fix, try setting the normal volume again afterwards, for some reason it goes up by 10 after the first time
         int secondVolume = getVolumeAnalog();
+
+        if (relayClosed) {
+          secondVolume += relayAnalogValOffsetSound;//to offset and neutralize the relay power interference if relay is powered / closed
+        }
+        
         if (normalVolume - secondVolume >= soundDifference) {
           if (DEBUG) {
             Serial.println("The second peak value of the sound is ");
@@ -81,18 +92,9 @@ void twoClapToggle() {
           reverseRelay();
           triggered = true;
           delay(triggerDelay);
-//          if(oddTime) {
-//            normalVolume += 10;//This is necessary when testing with a test LED or any change in energy, since when an LED is connected, the valeus change!
-//          }
-//          else {
-//            normalVolume -= 10;
-//          }
-//          oddTime = !oddTime;//for debugging
         }
       }
     }
-      //delay(10000);//testing stuff
-  //setNormalVolume();
   }
 }
 
