@@ -12,6 +12,7 @@ boolean triggerStateIsClose = true; //If 0, relay is closed; if 1, relay is open
 int testLed = 12; //D5, for debugging
 int relayPin = 2; //D2, digital pin for relay control
 int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
+int smokePin = 0; //A0, analog pin for MS-2 smoke detector
 int pirPin = 3; //D3, digital pin for Passive Infrared (PIR) sensor
 int tempPin = 2; // A2, analog pin for temperature sensor
 int dhtPin = 3; //D3, digital pin for the DHT temperature and humidity module
@@ -30,6 +31,8 @@ decode_results results;
 int lightThresh = 500; //threshold value for light sensor, a LOWER value means there is more light
 double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
 unsigned long motionInterval = 20000; // default time in milliseconds that the switch is closed after motion is detected until the sensing again
+int smokeThresh = 400;//threshold before recognizing danger
+int smokeInterval = 10000; //10 seconds, need to increase
 
 //Scaling constants
 const double tempConversion = .48828125; //constant for lm35 sensor
@@ -82,6 +85,6 @@ elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0.
 //relay analog value offsets, because relay when on affects analog values
 int relayAnalogValOffsetSound = 5;//UNTESTED, NOT SURE IF 5
 int relayAnalogValOffsetLight = 5;//UNTESTED, NOT SURE IF 5
-
+int relayAnalogValOffsetSmoke = 5;//UNTESTED, NOT SURE IF 5
 
 
