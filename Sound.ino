@@ -5,13 +5,26 @@
 //TODO: instead of delays, possibly use timeElapsed for clap detection
 //receives the three char command from the interpretCommand(), and makes sense of it
 void volumeInterpret(String filteredData) {
-  //assuming it is an integer 1-10
-  //setNormalVolume();//interference from bt module if here
-  soundDifference = (int)convertCommandToLong(filteredData);
-  if (DEBUG) {
-    Serial.println("Sound Difference value is set to ");
-    Serial.print(soundDifference);
-    Serial.println();
+  if (filteredData.charAt(0) == 'A') {
+    useOneClap = true;
+    useTwoClaps = false;
+    Serial.println("Sensing for one clap");
+  }
+  else if (filteredData.charAt(0) == 'B') {
+    useOneClap = false;
+    useTwoClaps = true;
+    Serial.println("Sensing for two claps");
+
+  }
+  else {
+    //assuming it is an integer 1-10
+    //setNormalVolume();//interference from bt module if here
+    soundDifference = (int)convertCommandToLong(filteredData);
+    if (DEBUG) {
+      Serial.println("Sound Difference value is set to ");
+      Serial.print(soundDifference);
+      Serial.println();
+    }
   }
 }
 
@@ -22,9 +35,12 @@ void soundSwitch() {
     setNormalVolume();
     firstSensorCall = false;
   }
-  //oneClapToggle();TODO: Make it so that user can select one clap toggle or twoClapToggle.
-
-  twoClapToggle();
+  if (useOneClap) {
+    oneClapToggle(); //TODO: Make it so that user can select one clap toggle or twoClapToggle.
+  }
+  else if (useTwoClaps) {
+    twoClapToggle();
+  }
 }
 
 void oneClapToggle() {
@@ -53,10 +69,7 @@ void twoClapToggle() {
   int firstWait = 150;
   int secondWait = 500;
   int triggerDelay = 1000;//after triggering, how long it waits before sensing agian
-  int firstVolume = getVolumeAnalog();
-  if (relayClosed) {
-    firstVolume += relayAnalogValOffsetSound;//to offset and neutralize the relay power interference if relay is powered / closed
-  }
+  int firstVolume = getVolumeAnalog();//includes offset for relay if needed
 
   if (normalVolume - firstVolume >= soundDifference) {
     if (DEBUG) {
@@ -78,11 +91,6 @@ void twoClapToggle() {
       long currentTime = millis();
       while (millis() - currentTime <= secondWait && !triggered) {//TO fix, try setting the normal volume again afterwards, for some reason it goes up by 10 after the first time
         int secondVolume = getVolumeAnalog();
-
-        if (relayClosed) {
-          secondVolume += relayAnalogValOffsetSound;//to offset and neutralize the relay power interference if relay is powered / closed
-        }
-        
         if (normalVolume - secondVolume >= soundDifference) {
           if (DEBUG) {
             Serial.println("The second peak value of the sound is ");
@@ -113,7 +121,13 @@ void setNormalVolume() {
 }
 
 //returns current analog value from the sensor
-int getVolumeAnalog() {
+int getVolumeAnalogRaw() {
   return analogRead(volPin);
+}
+
+int getVolumeAnalog() {
+  if (relayClosed) {
+    return getVolumeAnalogRaw() + relayAnalogValOffsetSound;
+  }
 }
 

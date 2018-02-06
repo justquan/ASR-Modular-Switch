@@ -11,13 +11,23 @@
 //assumes that filteredData is a String representation of an integer
 void lightInterpret(String filteredData) {
   lightThresh = filteredData.toInt();
-  
+
 }
 
 //a higher value for lightData means there is more light and less resistance
-int getLightData() {
+int getLightDataRaw() {
   int lightData = analogRead(photoresistorPin);
   return lightData;
+}
+
+//after adding the offset if needed
+int getLightData() {
+  if (relayClosed) {
+    return getLightDataRaw() + relayAnalogValOffsetLight;
+  }
+  else {
+    return getLightDataRaw();
+  }
 }
 
 void printLightData() {
@@ -30,11 +40,7 @@ void lightSwitch() {
   //  delay(500);// for debugging to read data TODO: see if this is needed
   //  printLightData();//for debugging
   int currentLightVal = getLightData();
-  
-  if(relayClosed) {
-    currentLightVal += relayAnalogValOffsetLight;
-  }
-  
+
   if (currentLightVal < lightThresh) {
     dormant();
     if (DEBUG) {

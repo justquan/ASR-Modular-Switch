@@ -1,7 +1,6 @@
 //receives the three char command from the interpretCommand(), and makes sense of it
 void smokeInterpret(String filteredData) {
   smokeThresh = (int)convertCommandToLong(filteredData);
-
 }
 
 void smokeSwitch() {
@@ -9,7 +8,7 @@ void smokeSwitch() {
     if (getSmokeValue >= smokeThresh) {//when there is smoke at levels that cross the threshold
       trigger();
       timeElapsed = 0;
-//      delay(10000);//find better way to set a delay
+      //      delay(10000);//find better way to set a delay
     }
     else {
       dormant();
@@ -18,7 +17,16 @@ void smokeSwitch() {
 }
 
 //gets analog smoke value; a higher value means a higher level of smoke.
-int getSmokeValue() {
+int getSmokeValueRaw() {
   return analogRead(smokePin);
+}
+
+int getSmokeValue() {
+  if (relayClosed) {
+    return getSmokeValueRaw() + relayAnalogValOffsetSmoke;
+  }
+  else {
+    return getSmokeValueRaw();
+  }
 }
 

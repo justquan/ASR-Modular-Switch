@@ -69,10 +69,14 @@ boolean saveIR = false; //determines if switch is in save mode or not for the IR
 int normalVolume = -1; //saves the value from the sound sensor module at normal levels
 int soundDifference = 2; //saves the difference from normalValue needed to register as a sound loud enough to trigger the switch
 
+boolean useOneClap = true;//when soundSwitch() is run, detect one clap. Default state is true.
+boolean useTwoClaps = false;//when soundSwitch() is run, detect two claps. Default state is false.
+
 boolean strobing = false;//determines if the switch should be strobbing
 boolean strobeIfTriggered = false;//determines whether or not switch should strobe if triggered
 unsigned long strobeInterval = 1000; //the length of time in ms for how long the relay should stay remain in a state before switching during strobbing
 unsigned long lastStrobeTime; //to track last time reversed for strobbing
+
 
 boolean firstSensorCall = true;
 
