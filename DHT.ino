@@ -19,9 +19,9 @@ void dhtSwitch() {//TODO: make it so that there's a range, and option so that if
     dht.setup(dhtPin);//sets up dht pin number
     firstSensorCall = false;
   }
-  if (DEBUG) {
-    exampleDHTPrint();
-  }
+//  if (DEBUG) {
+//    exampleDHTPrint();
+//  }
   if (timeElapsed >= dhtSamplingPeriod) {
     float currentTempC = dht.getTemperature();
     float currentTempF = dht.toFahrenheit(currentTempC);

@@ -91,4 +91,6 @@ int relayAnalogValOffsetSound = 5;//UNTESTED, NOT SURE IF 5
 int relayAnalogValOffsetLight = 5;//UNTESTED, NOT SURE IF 5
 int relayAnalogValOffsetSmoke = 5;//UNTESTED, NOT SURE IF 5
 
+//When there are two options to trigger / a max or min to trigger at
+boolean triggerWhenOverLightValue = true;
 

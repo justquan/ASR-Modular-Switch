@@ -5,12 +5,12 @@
 //TODO: instead of delays, possibly use timeElapsed for clap detection
 //receives the three char command from the interpretCommand(), and makes sense of it
 void volumeInterpret(String filteredData) {
-  if (filteredData.charAt(0) == 'A') {
+  if (filteredData.substring(1).equals ("1CL")) {
     useOneClap = true;
     useTwoClaps = false;
     Serial.println("Sensing for one clap");
   }
-  else if (filteredData.charAt(0) == 'B') {
+  else if (filteredData.substring(1).equals("2CL")) {
     useOneClap = false;
     useTwoClaps = true;
     Serial.println("Sensing for two claps");

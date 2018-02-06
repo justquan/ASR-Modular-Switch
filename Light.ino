@@ -10,8 +10,15 @@
 //receives the three char command from the interpretCommand(), and makes sense of it
 //assumes that filteredData is a String representation of an integer
 void lightInterpret(String filteredData) {
-  lightThresh = filteredData.toInt();
-
+  if (filteredData.substring(1).equals("TWO")) { //TWO command means Trigger When Over lightValue (when it's dark)
+    triggerWhenOverLightValue = true;
+  }
+  else if (filteredData.substring(1).equals("TWU")) { //TWU command means Trigger When under lightValue (when it's bright)
+    triggerWhenOverLightValue = false;
+  }
+  else {
+    lightThresh = filteredData.toInt();
+  }
 }
 
 //a higher value for lightData means there is more light and less resistance
@@ -41,16 +48,35 @@ void lightSwitch() {
   //  printLightData();//for debugging
   int currentLightVal = getLightData();
 
-  if (currentLightVal < lightThresh) {
-    dormant();
-    if (DEBUG) {
-      Serial.println("It's bright! Light value: " + currentLightVal);
+  if (triggerWhenOverLightValue) {//when it is dark
+    if (currentLightVal > lightThresh) {
+      trigger();
+      if (DEBUG) {
+        Serial.println("It's dark! Light value: " + currentLightVal);
+      }
+
+    }
+    else {// if currentLightVal < lightThresh
+      dormant();
+      if (DEBUG) {
+        Serial.println("It's bright! Light value: " + currentLightVal);
+      }
     }
   }
-  else {// if currentLightVal >= lightThresh
-    trigger();
-    if (DEBUG) {
-      Serial.println("It's dark! Light value: " + currentLightVal);
+
+  else {// trigger when under light value (when it is bright
+    if (currentLightVal < lightThresh) {
+      trigger();
+      if (DEBUG) {
+        Serial.println("It's bright! Light value: " + currentLightVal);
+      }
+
+    }
+    else {// if currentLightVal > lightThresh
+      dormant();
+      if (DEBUG) {
+        Serial.println("It's dark! Light value: " + currentLightVal);
+      }
     }
   }
 }
