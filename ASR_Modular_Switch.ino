@@ -36,6 +36,7 @@ void setup() {
 void loop() {
   if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
+    sendData();//super buggy, add delays. Also sometimes makes app slow. Make it so that it doesn't send messages until android app sends arduino a msg indicating that it's finished connecting maybe?
   }
   else {
     if (!strobing) { //so once the switch is strobing, it is strobing forever until reset

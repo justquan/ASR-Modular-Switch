@@ -11,7 +11,6 @@ void dhtInterpret(String filteredData) {
     Serial.print(tempThreshF);
     Serial.println();
   }
-  btPrintTemp();
 }
 
 void dhtSwitch() {//TODO: make it so that there's a range, and option so that if it goes below OR above the temperature, trigger / dormant
@@ -53,7 +52,7 @@ void exampleDHTPrint() {
 }
 
 //only use when not using dhtSwitch()
-void btPrintTemp() {
+void btPrintDHT() {//TODO: add utilities for humidity
   if (timeElapsed >= dhtSamplingPeriod) {
     timeElapsed = 0;
     String dhtStatus = dht.getStatusString();

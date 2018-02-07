@@ -139,7 +139,8 @@ int getVolumeAnalog() {
 
 //TODO: test this and find a place to put it. May have to make a separate function in the main loop that checks the module number while in setup mode, and uses the correct print function for the right sensor.
 void btPrintSound() {
-  String msg = "XSound value: " + getVolumeAnalog();//offset
-  BT.print(msg);
+  String val = String(getVolumeAnalog());
+  String msg = "X" + val;//offset
+  BT.println(msg);
 }
 

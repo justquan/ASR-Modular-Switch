@@ -31,3 +31,8 @@ int getSmokeValue() {
   }
 }
 
+void btPrintSmoke() {
+  String msg = "X" + getSmokeValue();
+  BT.println(msg);
+}
+

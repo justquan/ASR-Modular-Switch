@@ -82,3 +82,8 @@ void lightSwitch() {
   }
 }
 
+void btPrintLight() {
+  String msg = "X" + getLightData();
+  BT.println(msg);
+}
+

@@ -66,3 +66,12 @@ void motionSwitch() {
   //  }
 }
 
+void btPrintMotion() {
+  if(isMotion()) {
+    BT.println("Motion");
+  }
+  else {
+    BT.println("No Motion");
+  }
+}
+

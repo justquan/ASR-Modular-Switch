@@ -20,8 +20,8 @@ void sensorChooser() {//when the switch is not in setup mode, this method is cal
   }
 
   else if (moduleIndex == 6) {
-//    temperatureSwitch();
-      dhtSwitch();//switched out temperature with dht
+    //    temperatureSwitch();
+    dhtSwitch();//switched out temperature with dht
   }
 
 
@@ -44,6 +44,37 @@ void receiveData() {
     }
     interpretCommand(lastFourData);
     command = "";//reset command to be an empty String
+  }
+}
+
+//IMPORTANT: with all analog sensors, the data will be somewhat inaccurate with the HC-06 on, so maybe have to offset or take average or both (TODO)
+void sendData() {
+  int sendDataInterval = 2000;
+  if (timeElapsed > sendDataInterval) {
+    timeElapsed = 0;
+    if (moduleIndex == 1) {
+      btPrintLight();
+    }
+
+    else if (moduleIndex == 2) {
+      btPrintIR();
+    }
+
+    else if (moduleIndex == 3) {
+      btPrintMotion();
+    }
+
+    else if (moduleIndex == 4) {
+      btPrintSmoke();
+    }
+    else if (moduleIndex == 5) {
+      btPrintSound();
+    }
+
+    else if (moduleIndex == 6) {
+      //    temperatureSwitch();
+      btPrintDHT();//switched out temperature with dht
+    }
   }
 }
 
@@ -123,7 +154,7 @@ void interpretCommand (String dataBT) {
   else if (dataBT.charAt(0) == 'T') {
     moduleIndex = 6;
     dhtInterpret(dataBT.substring(1));//replaces temperature with dht here
- //   temperatureInterpret(dataBT.substring(1));
+    //   temperatureInterpret(dataBT.substring(1));
   }
 }
 

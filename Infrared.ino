@@ -32,3 +32,8 @@ void storeIRCode() {//use EEPROM
   }
 }
 
+void btPrintIR() {
+  String msg = "Xplaceholder";
+  BT.println(msg);
+}
+
