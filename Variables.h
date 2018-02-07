@@ -87,7 +87,7 @@ int dhtSamplingPeriod = dht.getMinimumSamplingPeriod();
 elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0. Important: Only use this variable for one thing at a time. This can be used across multiple sensors, but only if the sensors are being used one at a time.
 
 //relay analog value offsets, because relay when on affects analog values
-int relayAnalogValOffsetSound = 5;//UNTESTED, NOT SURE IF 5
+int relayAnalogValOffsetSound = -6;//UNTESTED, NOT SURE IF 5// after testing 2/6, values first were 361 when closeRelay() and was 367for one second then 364 or 365 when openRelay(). Then, after 5 mins, range was 362 to 368/369. set as 6 on 2/6
 int relayAnalogValOffsetLight = 5;//UNTESTED, NOT SURE IF 5
 int relayAnalogValOffsetSmoke = 5;//UNTESTED, NOT SURE IF 5
 

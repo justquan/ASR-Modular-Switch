@@ -1,7 +1,6 @@
 #include "Variables.h" //File with my global variables
 
 void setup() {
-
   btPowerOn();  //When switch is rebooted, power flows to the HC-06 bluetooth module.
   Serial.begin(9600); //baud rate of 900
   BT.begin(9600);
@@ -23,20 +22,18 @@ void setup() {
   //Serial.println(storedCode);//debug
   //printAllEEPROMAnything();
   // dht.setup(3);//when testing without bt app
-  delay(2000);
-  setNormalVolume();
-  soundDifference = 5;
+  //  delay(2000);
+  //  setNormalVolume();
+  //  soundDifference = 5;
   //  btPowerOff();
-  closeRelay();
+  //  closeRelay();
+
   timeElapsed = 0; //reset time
+  openRelay();//default state is opening the relay
+  delay(100);
+
 }
 void loop() {
-  //  closeRelay();
-  //  Serial.println("Analog volume value: ");
-  //  Serial.println(getVolumeAnalog());
-  //  delay(200);
-
-  //dhtSwitch();
   if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
   }
@@ -46,6 +43,28 @@ void loop() {
     }
     checkStrobe();
   }
+
+
+
+    //  btPowerOff();
+  //  closeRelay();
+
+  //  for (int i = 1; i < 20; i++) {
+  //    Serial.println("Analog volume value when relay is closed / on : ");
+  //    Serial.println(getVolumeAnalog());
+  //    delay(200);
+  //  }
+  //
+  //  openRelay();
+  ////  Serial.println(getVolumeAnalogRaw());
+  ////  delay(30);
+  //  for (int i = 1; i < 20; i++) {
+  //    Serial.println("Analog volume value when relay is open / off : ");
+  //    Serial.println(getVolumeAnalog());
+  //    delay(200);
+  //  }
+
+  
   //moduleIndex = 3;//for testing pir stuff
   //sensorChooser();
   //Serial.println(analogRead(0));

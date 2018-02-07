@@ -29,11 +29,12 @@ int getLightDataRaw() {
 
 //after adding the offset if needed
 int getLightData() {
+  int alteredLightVal = getLightDataRaw();
   if (relayClosed) {
-    return getLightDataRaw() + relayAnalogValOffsetLight;
+    return alteredLightVal + relayAnalogValOffsetLight;
   }
   else {
-    return getLightDataRaw();
+    return alteredLightVal;
   }
 }
 

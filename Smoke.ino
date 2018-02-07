@@ -22,11 +22,12 @@ int getSmokeValueRaw() {
 }
 
 int getSmokeValue() {
+  int alteredSmokeVal = getSmokeValueRaw();
   if (relayClosed) {
-    return getSmokeValueRaw() + relayAnalogValOffsetSmoke;
+    return alteredSmokeVal + relayAnalogValOffsetSmoke;
   }
   else {
-    return getSmokeValueRaw();
+    return alteredSmokeVal;
   }
 }
 

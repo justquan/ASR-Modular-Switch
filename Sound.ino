@@ -31,16 +31,17 @@ void volumeInterpret(String filteredData) {
 void soundSwitch() {
   if (firstSensorCall) {
     openRelay();//IMPORTANT: make sure relay is open / off, so that it is not consuming power and interfering with the sound sensor analog values
-    delay(100);//time for relay to open, if not open already
+    delay(200);//time for relay to open, if not open already
     setNormalVolume();
     firstSensorCall = false;
   }
-  if (useOneClap) {
-    oneClapToggle(); //TODO: Make it so that user can select one clap toggle or twoClapToggle.
-  }
-  else if (useTwoClaps) {
-    twoClapToggle();
-  }
+  twoClapToggle();
+//  if (useOneClap) {
+//    oneClapToggle(); //TODO: Make it so that user can select one clap toggle or twoClapToggle.
+//  }
+//  else if (useTwoClaps) {
+//    twoClapToggle();
+//  }
 }
 
 void oneClapToggle() {
@@ -81,7 +82,7 @@ void twoClapToggle() {
       Serial.println();
     }
     delay(firstWait);//NOT WORKING, TODO: FIX, ONLY WORKS THE FIRST TIME, THEN IT NEVER SENSES IF THE NORMAL VOLUME IS RANGE EVEN IF IT IS
-    if (abs(normalVolume - getVolumeAnalog()) <= 2) {//error of 2, meaning that it won't work if the user selects 2 as the sensitivity on the app
+    if (abs(normalVolume - getVolumeAnalog()) <= 3) {//error of 3, meaning that it won't work if the user selects 3 as the sensitivity on the app
       if (DEBUG) {
         Serial.println("The value of sound is within the range of normal.");
         Serial.println("Delaying for ");
@@ -108,7 +109,7 @@ void twoClapToggle() {
 
 void setNormalVolume() {
   int totalNormalVolume = 0;
-  int numNormalVolumes = 10;//Number of times the for loop is run through
+  int numNormalVolumes = 30;//Number of times the for loop is run through
   for (int i = 0; i < numNormalVolumes; i++) {
     totalNormalVolume += getVolumeAnalog();
   }
@@ -126,8 +127,12 @@ int getVolumeAnalogRaw() {
 }
 
 int getVolumeAnalog() {
+  int alteredValue = getVolumeAnalogRaw();
   if (relayClosed) {
-    return getVolumeAnalogRaw() + relayAnalogValOffsetSound;
+    return alteredValue + relayAnalogValOffsetSound;
+  }
+  else {
+    return alteredValue;
   }
 }
 
