@@ -49,8 +49,7 @@ void receiveData() {
 
 //IMPORTANT: with all analog sensors, the data will be somewhat inaccurate with the HC-06 on, so maybe have to offset or take average or both (TODO)
 void sendData() {
-  int sendDataInterval = 2000;
-  if (timeElapsed > sendDataInterval) {
+  if (timeElapsed > sendDataIntervalMillis) {
     timeElapsed = 0;
     if (moduleIndex == 1) {
       btPrintLight();

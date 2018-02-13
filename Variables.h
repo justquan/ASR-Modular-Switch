@@ -82,6 +82,7 @@ boolean firstSensorCall = true;
 
 DHT dht;
 int dhtSamplingPeriod = dht.getMinimumSamplingPeriod();
+int sendDataIntervalMillis = 3000;
 
 //elapsedMillis is a long, so theoretically 49.7 days before rolling over
 elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0. Important: Only use this variable for one thing at a time. This can be used across multiple sensors, but only if the sensors are being used one at a time.
