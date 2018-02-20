@@ -31,24 +31,24 @@ void setup() {
   timeElapsed = 0; //reset time
   openRelay();//default state is opening the relay
   delay(100);
-
 }
+
 void loop() {
-//  if (setupSwitch) { //if the switch is in the setup mode
-//    receiveData();//then receive data from the Android
-//    sendData();//super buggy, add delays. Also sometimes makes app slow. Make it so that it doesn't send messages until android app sends arduino a msg indicating that it's finished connecting maybe?
-//  }
-//  if (!strobing) { //so once the switch is strobing, it is strobing forever until reset
-//    sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
-//  }
-//  checkStrobe();
-
-
-//btPowerOff();
-//int sval = getSmokeValueRaw();
-//if(sval > 180 || sval < 180) {
-//  Serial.println(sval);
-//}
+  if (setupSwitch) { //if the switch is in the setup mode
+    receiveData();//then receive data from the Android
+    sendData();//super buggy, add delays. Also sometimes makes app slow. Make it so that it doesn't send messages until android app sends arduino a msg indicating that it's finished connecting maybe?
+  }
+  if (!strobing) { //so once the switch is strobing, it is strobing forever until reset
+    sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
+  }
+  checkStrobe();
+  //  btPowerOff();
+  //  int sval = getSmokeValueRaw();
+  //  Serial.println(sval);
+  //  delay(200);
+  //if(sval > 180 || sval < 180) {
+  //  Serial.println(sval);
+  //}
 
   //  btPowerOff();
   //  closeRelay();

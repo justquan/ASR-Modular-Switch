@@ -1,28 +1,51 @@
 void sensorChooser() {//when the switch is not in setup mode, this method is called consistently in the main loop
-  //setModuleIndexFromBT();
-  if (moduleIndex == 1) {
-    lightSwitch();
+  switch (moduleIndex) {
+    case 1:
+      lightSwitch();
+      break;
+    case 2:
+      infraredSwitch();
+      break;
+    case 3:
+      motionSwitch();
+      break;
+    case 4:
+      smokeSwitch();
+      break;
+    case 5:
+      soundSwitch();
+      break;
+    case 6:
+      dhtSwitch();//not using temperatureSwitch
+      break;
+    default://if moduleIndex is not between 1 and 6 inclusive
+      break;
   }
 
-  else if (moduleIndex == 2) {
-    infraredSwitch();
-  }
 
-  else if (moduleIndex == 3) {
-    motionSwitch();
-  }
-
-  else if (moduleIndex == 4) {
-    smokeSwitch();
-  }
-  else if (moduleIndex == 5) {
-    soundSwitch();
-  }
-
-  else if (moduleIndex == 6) {
-    //    temperatureSwitch();
-    dhtSwitch();//switched out temperature with dht
-  }
+  //  if (moduleIndex == 1) {
+  //    lightSwitch();
+  //  }
+  //
+  //  else if (moduleIndex == 2) {
+  //    infraredSwitch();
+  //  }
+  //
+  //  else if (moduleIndex == 3) {
+  //    motionSwitch();
+  //  }
+  //
+  //  else if (moduleIndex == 4) {
+  //    smokeSwitch();
+  //  }
+  //  else if (moduleIndex == 5) {
+  //    soundSwitch();
+  //  }
+  //
+  //  else if (moduleIndex == 6) {
+  //    //    temperatureSwitch();
+  //    dhtSwitch();//switched out temperature with dht
+  //  }
 
 
   //TODO: create proper system to determine what module is being used to use appropriate methods in code
@@ -49,31 +72,53 @@ void receiveData() {
 
 //IMPORTANT: with all analog sensors, the data will be somewhat inaccurate with the HC-06 on, so maybe have to offset or take average or both (TODO)
 void sendData() {
+
   if (timeElapsed > sendDataIntervalMillis) {
     timeElapsed = 0;
-    if (moduleIndex == 1) {
-      btPrintLight();
+    switch (moduleIndex) {
+      case 1:
+        btPrintLight();
+        break;
+      case 2:
+        btPrintIR();
+        break;
+      case 3:
+        btPrintMotion();
+        break;
+      case 4:
+        btPrintSmoke();
+        break;
+      case 5:
+        btPrintSound();
+        break;
+      case 6:
+        btPrintDHT();//not using temperatureSwitch
+        break;
+      default://if moduleIndex is not between 1 and 6 inclusive
+        break;
     }
-
-    else if (moduleIndex == 2) {
-      btPrintIR();
-    }
-
-    else if (moduleIndex == 3) {
-      btPrintMotion();
-    }
-
-    else if (moduleIndex == 4) {
-      btPrintSmoke();
-    }
-    else if (moduleIndex == 5) {
-      btPrintSound();
-    }
-
-    else if (moduleIndex == 6) {
-      //    temperatureSwitch();
-      btPrintDHT();//switched out temperature with dht
-    }
+    //    if (moduleIndex == 1) {
+    //      btPrintLight();
+    //    }
+    //
+    //    else if (moduleIndex == 2) {
+    //      btPrintIR();
+    //    }
+    //
+    //    else if (moduleIndex == 3) {
+    //      btPrintMotion();
+    //    }
+    //
+    //    else if (moduleIndex == 4) {
+    //      btPrintSmoke();
+    //    }
+    //    else if (moduleIndex == 5) {
+    //      btPrintSound();
+    //    }
+    //    else if (moduleIndex == 6) {
+    //      //    temperatureSwitch();
+    //      btPrintDHT();//switched out temperature with dht
+    //    }
   }
 }
 
@@ -87,10 +132,6 @@ void interpretCommand (String dataBT) {
 
   //debugging with LED
   if (dataBT.equals("G_ON")) {
-    //    digitalWrite(testLed, HIGH);
-    //    BT.write("AON~");//for debugging / displaying data to android attempt
-    //    BT.print("AON~");//debug
-    //    Serial.println("android should say AON~");//debug, 12/29 added ~ to mark the end of the message
     closeRelay();
   }
   //sets triggerStateClosed to true, so when triggered, it closes the relay
