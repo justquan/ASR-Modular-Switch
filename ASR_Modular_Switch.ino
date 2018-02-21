@@ -37,6 +37,7 @@ void loop() {
   if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
     sendData();//super buggy, add delays. Also sometimes makes app slow. Make it so that it doesn't send messages until android app sends arduino a msg indicating that it's finished connecting maybe?
+    runSetupProcesses();
   }
   if (!strobing) { //so once the switch is strobing, it is strobing forever until reset
     sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
@@ -86,38 +87,4 @@ void loop() {
   //delay(100);
 
   //relay being turned on and off + onboard LEDs disrupts analog signal of the sound sensor
-
-}
-
-
-//disconnect GND to HC-06 bt module by sending no power to the base pin of the NPN transistor
-void btPowerOff() {
-  digitalWrite(btPowerBasePin, LOW);
-}
-
-//Connect GND to HC-06 bt module by sending power to the base pin of the NPN transistor
-void btPowerOn() {
-  digitalWrite(btPowerBasePin, HIGH);
-}
-
-void clearEEPROM() { //for testing, to clear all EEPROM data
-  for (int i = 0 ; i < EEPROM.length() ; i++) {
-    EEPROM.write(i, 0);
-  }
-}
-
-//prints every EEPROM Byte, including zero values
-void printAllEEPROMBytes() {
-  for (int i = 0 ; i < EEPROM.length() ; i++) {
-    Serial.println(EEPROM.read(i));
-  }
-}
-
-//prints all longs stored with EEPROM_writeAnything(), but also includes zero values.
-void printAllEEPROMAnything() {
-  for (int i = 0 ; i < EEPROM.length() ; i++) {
-    long temp;
-    EEPROM_readAnything(i, temp);
-    Serial.println(temp);
-  }
 }
