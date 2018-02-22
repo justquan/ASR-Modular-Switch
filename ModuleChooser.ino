@@ -130,6 +130,7 @@ void interpretCommand (String dataBT) {
   String remainingString = dataBT.substring(1);
   switch (firstChar) {
     case 'G':
+      moduleIndex = -1;//so no sensor is chosen
       generalInterpret(remainingString);
       break;
     case 'L':
@@ -233,27 +234,25 @@ void interpretCommand (String dataBT) {
 
 //function run while in setup mode to run any necessary functions related to setting up usage with a sensor module
 void runSetupProcesses() {
-    timeElapsed = 0;
-    switch (moduleIndex) {
-      case 1:
-        btPrintLight();
-        break;
-      case 2:
-        storeIRCode();//TODO Feb 21, implement
-        break;
-      case 3:
-        
-        break;
-      case 4:
-        
-        break;
-      case 5:
-        break;
-      case 6:
-        break;
-      default://if moduleIndex is not between 1 and 6 inclusive
-        break;
-    }
+  timeElapsed = 0;
+  switch (moduleIndex) {
+    case 1:
+      btPrintLight();
+      break;
+    case 2:
+      storeIRCode();//TODO Feb 21, implement
+      break;
+    case 3:
+      break;
+    case 4:
+      break;
+    case 5:
+      break;
+    case 6:
+      break;
+    default://if moduleIndex is not between 1 and 6 inclusive
+      break;
+  }
 }
 
 long convertCommandToLong(String stringCommand) {

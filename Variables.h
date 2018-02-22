@@ -9,7 +9,7 @@ boolean relayClosed = false; //If false, relay is open (off); if true, relay is 
 boolean triggerStateIsClose = true; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
 
 //Pins
-int testLed = 12; //D5, for debugging
+int testLed = 1; //D1, for debugging
 int relayPin = 2; //D2, digital pin for relay control
 int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
 int smokePin = 0; //A0, analog pin for MS-2 smoke detector
@@ -18,9 +18,9 @@ int tempPin = 2; // A2, analog pin for temperature sensor
 int dhtPin = 3; //D3, digital pin for the DHT temperature and humidity module
 int volPin = 0; //A0, analog pin for sound sensor
 int IRpin = 9;  // D9, digital pin for IR sensor
-int BTTX = 5; //D10, connect TX pin from BT module to this pin
-int BTRX = 6; //D11, connect RX pin from Bt module to this pin
-int btPowerBasePin = 8; //D7, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06.
+int BTTX = 11; //D11, connect TX pin from BT module to this pin. Used to be 5, changed to 11 when soldered Pro mini.
+int BTRX = 12; //D12, connect RX pin from BT module to this pin. Used to be 6, changed to 12 when soldered Pro mini.
+int btPowerBasePin = 13; //D13, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06. Used to be 8, changed to 13 when soldered to Pro mini.
 
 
 //Variables from public ir library
@@ -94,4 +94,12 @@ int relayAnalogValOffsetSmoke = 5;//UNTESTED, NOT SURE IF 5
 
 //When there are two options to trigger / a max or min to trigger at
 boolean triggerWhenOverLightValue = true;
+
+//for storing IR Code in EEPROm 2/21
+struct irEEPROMStruct{
+  long irEEPROMCode;//should be in HEX form
+  //use long not int so you won't run out of room
+};
+
+irEEPROMStruct irStored = {-1}; //default
 
