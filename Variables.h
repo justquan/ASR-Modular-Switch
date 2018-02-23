@@ -9,18 +9,33 @@ boolean relayClosed = false; //If false, relay is open (off); if true, relay is 
 boolean triggerStateIsClose = true; //If 0, relay is closed; if 1, relay is open; if 2, relay is strobing. triggerState is the state the switch
 
 //Pins
+int moduleAnalogPin = 0;//The pins for modules using the soldered board
+int moduleDigitalPin = 10;
+
 int testLed = 1; //D1, for debugging
 int relayPin = 2; //D2, digital pin for relay control
-int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
-int smokePin = 0; //A0, analog pin for MS-2 smoke detector
-int pirPin = 3; //D3, digital pin for Passive Infrared (PIR) sensor
-int tempPin = 2; // A2, analog pin for temperature sensor
-int dhtPin = 3; //D3, digital pin for the DHT temperature and humidity module
-int volPin = 0; //A0, analog pin for sound sensor
-int IRpin = 9;  // D9, digital pin for IR sensor
+int photoresistorPin = moduleAnalogPin; //A0, analog pin for photoresistor (light) sensor
+int smokePin = moduleAnalogPin; //A0, analog pin for MS-2 smoke detector
+int pirPin = moduleDigitalPin; //D3, digital pin for Passive Infrared (PIR) sensor
+int tempPin = moduleAnalogPin; // A2, analog pin for temperature sensor
+int dhtPin = moduleDigitalPin; //D3, digital pin for the DHT temperature and humidity module
+int volPin = moduleAnalogPin; //A0, analog pin for sound sensor
+int IRpin = moduleDigitalPin;  // D9, digital pin for IR sensor
 int BTTX = 11; //D11, connect TX pin from BT module to this pin. Used to be 5, changed to 11 when soldered Pro mini.
 int BTRX = 12; //D12, connect RX pin from BT module to this pin. Used to be 6, changed to 12 when soldered Pro mini.
 int btPowerBasePin = 13; //D13, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06. Used to be 8, changed to 13 when soldered to Pro mini.
+//int testLed = 1; //D1, for debugging
+//int relayPin = 2; //D2, digital pin for relay control
+//int photoresistorPin = 0; //A0, analog pin for photoresistor (light) sensor
+//int smokePin = 0; //A0, analog pin for MS-2 smoke detector
+//int pirPin = 3; //D3, digital pin for Passive Infrared (PIR) sensor
+//int tempPin = 2; // A2, analog pin for temperature sensor
+//int dhtPin = 3; //D3, digital pin for the DHT temperature and humidity module
+//int volPin = 0; //A0, analog pin for sound sensor
+//int IRpin = 9;  // D9, digital pin for IR sensor
+//int BTTX = 11; //D11, connect TX pin from BT module to this pin. Used to be 5, changed to 11 when soldered Pro mini.
+//int BTRX = 12; //D12, connect RX pin from BT module to this pin. Used to be 6, changed to 12 when soldered Pro mini.
+//int btPowerBasePin = 13; //D13, digital pin for the base of the 2N3904 NPN transistor used to control the GND to the HC-06. Used to be 8, changed to 13 when soldered to Pro mini.
 
 
 //Variables from public ir library
@@ -64,7 +79,7 @@ unsigned long storedCode;//int or unsigned long?
 
 boolean DEBUG = true;
 
-boolean saveIR = false; //determines if switch is in save mode or not for the IR sensor
+boolean saveIR = true; //determines if switch is in save mode or not for the IR sensor. feb 22, made it so that the defualt is true
 
 int normalVolume = -1; //saves the value from the sound sensor module at normal levels
 int soundDifference = 2; //saves the difference from normalValue needed to register as a sound loud enough to trigger the switch
@@ -97,9 +112,9 @@ boolean triggerWhenOverLightValue = true;
 
 //for storing IR Code in EEPROm 2/21
 struct irEEPROMStruct{
-  long irEEPROMCode;//should be in HEX form
+  long irEEPROMCode;//should be in DEC form
   //use long not int so you won't run out of room
 };
 
-irEEPROMStruct irStored = {-1}; //default
+irEEPROMStruct irStored = {0}; //default
 

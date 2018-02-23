@@ -32,13 +32,17 @@ void setup() {
 
   timeElapsed = 0; //reset time
   openRelay();//default state is opening the relay
+  EEPROM_readAnything(0, irStored);//sets irStored struct to have previously saved value in the EEPROM. Needed for infraredSwitch()
+
+
   delay(100);
 }
 
 void loop() {
+
   if (setupSwitch) { //if the switch is in the setup mode
     receiveData();//then receive data from the Android
-//    sendData();//super buggy, add delays. Also sometimes makes app slow. Make it so that it doesn't send messages until android app sends arduino a msg indicating that it's finished connecting maybe?
+    //    sendData();//super buggy, add delays. Also sometimes makes app slow. Make it so that it doesn't send messages until android app sends arduino a msg indicating that it's finished connecting maybe?
     //TODO: fix sendData so that it is called individually in each sensor tab after new data is received, not run it consistently
     runSetupProcesses();
   }
@@ -46,6 +50,11 @@ void loop() {
     sensorChooser();//if the switch isn't in setup mode anymore, run method for the correct sensor in a loop.
   }
   checkStrobe();
+
+
+
+
+
   //  btPowerOff();
   //  int sval = getSmokeValueRaw();
   //  Serial.println(sval);

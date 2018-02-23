@@ -130,7 +130,9 @@ void interpretCommand (String dataBT) {
   String remainingString = dataBT.substring(1);
   switch (firstChar) {
     case 'G':
-      moduleIndex = -1;//so no sensor is chosen
+      if (!remainingString.equals("DCT")) {//aboslutely necessary, fixes annoying bug, so that when you press the disconnect button, it remembers the actual moduleIndex
+        moduleIndex = -1;//so no sensor is chosen
+      }
       generalInterpret(remainingString);
       break;
     case 'L':
@@ -157,6 +159,9 @@ void interpretCommand (String dataBT) {
       moduleIndex = 6;
       dhtInterpret(remainingString);//replaces temperature with dht here
     default:
+      if (DEBUG) {
+        Serial.println("No module matches the first character");
+      }
       break;
   }
   //  if (dataBT.equals("GOFF")) {
@@ -237,7 +242,7 @@ void runSetupProcesses() {
   timeElapsed = 0;
   switch (moduleIndex) {
     case 1:
-      btPrintLight();
+      //      btPrintLight();
       break;
     case 2:
       storeIRCode();//TODO Feb 21, implement
