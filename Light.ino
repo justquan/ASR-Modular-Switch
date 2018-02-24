@@ -38,10 +38,10 @@ int getLightData() {
   }
 }
 
+//for debugging
 void printLightData() {
-  Serial.println("lightData: ");//Don't condense print statements into one line or else error
+  Serial.print("lightData: ");
   Serial.println(getLightData());
-  Serial.println (" ");
 }
 
 void lightSwitch() {

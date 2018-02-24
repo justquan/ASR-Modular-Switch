@@ -6,7 +6,7 @@ void smokeInterpret(String filteredData) {
 
 void smokeSwitch() {
   int currentSmokeVal = getSmokeValue();
-  if(DEBUG) {
+  if (DEBUG) {
     Serial.println("Smoke value (filtered): ");
     Serial.println(currentSmokeVal);
   }

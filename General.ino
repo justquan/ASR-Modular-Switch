@@ -34,6 +34,21 @@ void btPowerOn() {
   digitalWrite(btPowerBasePin, HIGH);
 }
 
+void redStatusLEDOn() {
+  digitalWrite(redStatusLED, HIGH);
+  digitalWrite(greenStatusLED, LOW);
+}
+
+void greenStatusLEDOn() {
+  digitalWrite(greenStatusLED, HIGH);
+  digitalWrite(redStatusLED, LOW);
+}
+
+void statusLEDOff() {
+  digitalWrite(redStatusLED, LOW);
+  digitalWrite(greenStatusLED, LOW);
+}
+
 void clearEEPROM() { //for testing, to clear all EEPROM data
   for (int i = 0 ; i < EEPROM.length() ; i++) {
     EEPROM.write(i, 0);

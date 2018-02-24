@@ -61,7 +61,9 @@ void storeIRCode() {
       Serial.print(" DEC: ");
       Serial.println(receivedCodeDEC); // Print the Serial 'results.value'
     }
-    //    clearEEPROM();
+    if (sendDataToAndroid) {
+      btPrintIR(receivedCodeDEC);
+    }
     if (saveIR) {//if mode to save IR code as key code is enabled
       if (receivedCodeDEC != -1) {//when it is not FFFFFFFF. This is the value when a button is held down
         irStored.irEEPROMCode = (receivedCodeDEC);//stores HEX value of code into irStored Struct
@@ -71,12 +73,11 @@ void storeIRCode() {
       }
     }
     irrecv.resume();   // Receive the next value
-
   }
 }
 
-void btPrintIR() {
-  String msg = String(irStored.irEEPROMCode);//sends saved IR code.
+void btPrintIR(int code) {
+  String msg = "X" + String(code);//sends saved key IR code.
   BT.println(msg);
 }
 
