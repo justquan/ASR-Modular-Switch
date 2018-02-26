@@ -28,6 +28,7 @@ boolean isMotion() {
   }
 }
 
+//for debugging
 void printMotionData() {
   if (isMotion()) {
     Serial.println("Motion detected!");
@@ -35,7 +36,6 @@ void printMotionData() {
   else {
     Serial.println("No motion");
   }
-  // delay(300);
 }
 
 void motionSwitch() {
@@ -52,18 +52,6 @@ void motionSwitch() {
       dormant();
     }
   }
-
-  //Old code for dela, didn't used timeElapsed
-  //  unsigned long currentTime = millis(); //sets currentTime to the current time in seconds according to the Arduino's crystal
-  //  if (currentTime - previousMotionMillis >= motionInterval) {//if the difference between the current time and the last time the motion sensor was triggered is greater than the interval set by the user, the Arduino resumes "listening" for motion.
-  //    if (isMotion()) {
-  //      trigger();
-  //      previousMotionMillis = currentTime;
-  //    }
-  //    else {
-  //      dormant();
-  //    }
-  //  }
 }
 
 void btPrintMotion() {

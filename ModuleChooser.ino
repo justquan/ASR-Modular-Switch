@@ -40,6 +40,7 @@ void receiveData() {
     }
     interpretCommand(lastFourData);
     command = "";//reset command to be an empty String
+    btConnectionMade = true;
   }
 }
 
@@ -125,6 +126,7 @@ void interpretCommand (String dataBT) {
 
 //function run while in setup mode to run any necessary functions related to setting up usage with a sensor module
 void runSetupProcesses() {
+  checkSleep();
   switch (moduleIndex) {
     case 1:
       //      btPrintLight();

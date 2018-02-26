@@ -19,8 +19,13 @@ void generalInterpret(String filteredData) {
   }
   else if (filteredData.equals("DCT")) {
     btPowerOff();
-    delay(1000);//gives time to turn off to prevent interference in analog signals
+    delay(btDisconnectDelay);//gives time to turn off to prevent interference in analog signals. Not affected by clock slowing, so no need to scale.
     setupSwitch = false;
+    setClockSpeedSlow();
+  }
+  else if(filteredData.equals("SLP")) {//TODO: Make a sleep button in Android app
+    delay(20);
+    sleep();
   }
 }
 
@@ -68,6 +73,40 @@ void printAllEEPROMAnything() {
     long temp;
     EEPROM_readAnything(i, temp);
     Serial.println(temp);
+  }
+}
+
+//initial setting to default clock speed
+void setClockSpeedDefault() {
+  CLKPR = 0x80;//required protocol to set the clock frequency
+  CLKPR = 0x01;//sets the 16 MHz clock frequency to a 1:1 default, unchanged ratio.
+  if (DEBUG) {
+    Serial.println("Clock speed set to normal. ");
+  }
+}
+
+//called after BT disconnected and setupSwitch is false, running the normal sensorChooser(). Slows clock speed to save power.
+void setClockSpeedSlow() {
+  CLKPR = 0x80;//required protocol to set the clock frequency
+  CLKPR = clockSpeedReduction;//sets the 16 MHz clock frequency to half speed. 0x00 = unchanged, 0x01 = half speed, 0x02 = quarter speed, 0x03 = eigth speed, etc.
+}
+
+//uses library fuctions to put microcontroller to sleep
+void sleep() {
+  if(DEBUG) {
+    Serial.println("Going to sleep.");
+    delay(20);
+  }
+  set_sleep_mode (SLEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  sleep_cpu();
+}
+
+//checks to see if the amount of time since switch was turned on is over or at the minimum time before going to sleep, and if it is and is in setup mode, calls sleep()
+//the check for btConnectionMade is to make sure it doesn't go to sleep while a user is trying to connect to it.
+void checkSleep() {
+  if(millis() >= minTimeBeforeSleep && setupSwitch && !btConnectionMade) {
+    sleep();
   }
 }
 

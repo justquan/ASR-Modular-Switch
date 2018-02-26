@@ -22,9 +22,10 @@ void setup() {
   openRelay();//default state is opening the relay
   statusLEDOff();
 
-  delay(100);//time for relay to open
+  delay(setupDelay);//time for relay to open
   timeElapsed = 0; //reset time
   timeElapsedSendBT = 0;
+  setClockSpeedDefault();
 }
 
 void loop() {

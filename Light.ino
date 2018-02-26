@@ -45,8 +45,6 @@ void printLightData() {
 }
 
 void lightSwitch() {
-  //  delay(500);// for debugging to read data TODO: see if this is needed
-  //  printLightData();//for debugging
   int currentLightVal = getLightData();
 
   if (triggerWhenOverLightValue) {//when it is dark

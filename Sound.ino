@@ -17,50 +17,43 @@ void volumeInterpret(String filteredData) {
 
   }
   else {
-    //assuming it is an integer 1-10
-    //setNormalVolume();//interference from bt module if here
+    //assuming it is an integer 1-20
     soundDifference = (int)convertCommandToLong(filteredData);
     if (DEBUG) {
-      Serial.println("Sound Difference value is set to ");
-      Serial.print(soundDifference);
-      Serial.println();
-    }
-    
+      Serial.print("Sound Difference value is set to ");
+      Serial.println(soundDifference);
+    }  
   }
 }
 
 void soundSwitch() {
   if (firstSensorCall) {
     openRelay();//IMPORTANT: make sure relay is open / off, so that it is not consuming power and interfering with the sound sensor analog values
-    delay(200);//time for relay to open, if not open already
+    delay(setupDelay);//time for relay to open, if not open already
     setNormalVolume();
     firstSensorCall = false;
   }
-  twoClapToggle();
-//  if (useOneClap) {
-//    oneClapToggle(); //TODO: Make it so that user can select one clap toggle or twoClapToggle.
-//  }
-//  else if (useTwoClaps) {
-//    twoClapToggle();
-//  }
+  if (useOneClap) {
+    oneClapToggle(); //TODO: Make it so that user can select one clap toggle or twoClapToggle.
+  }
+  else if (useTwoClaps) {
+    twoClapToggle();
+  }
 }
 
 void oneClapToggle() {
-  int triggerDelay = 1000;//after triggering, how long it waits before sensing agian
   int currentVolume = getVolumeAnalog();
   if (normalVolume - currentVolume >= soundDifference) { //If the currentvolume has a volume lower than the normal volume by aoundDifference units, it is triggered.
     if (DEBUG) {
-      Serial.println("The initial value of the sound that just triggered the relay is ");
-      Serial.print(currentVolume);
-      Serial.println();
+      Serial.print("The initial value of the sound that just triggered the relay is ");
+      Serial.println(currentVolume);
     }
     reverseRelay();//toggle relay
     if (DEBUG) {
-      Serial.println("Triggered. Delaying listening for ");
-      Serial.print(triggerDelay);
-      Serial.println();
+      Serial.print("Triggered. Delaying listening for ");
+      Serial.println(soundTriggerDelay);
     }
-    delay(triggerDelay);//TODO: Use millis() timer instead of delay(), because delay() delays all other processes in addition to soundSwitch
+    delay(soundTriggerDelay);//TODO: Use millis() timer instead of delay(), because delay() delays all other processes in addition to soundSwitch
     //delay is to avoid debouncing, the switch shouldn't listen to data right after it receives triggering data
   }
 }
@@ -68,40 +61,33 @@ void oneClapToggle() {
 
 void twoClapToggle() {
   boolean triggered = false;
-  int firstWait = 150;
-  int secondWait = 500;
-  int triggerDelay = 1000;//after triggering, how long it waits before sensing agian
   int firstVolume = getVolumeAnalog();//includes offset for relay if needed
 
   if (normalVolume - firstVolume >= soundDifference) {
     if (DEBUG) {
-      Serial.println("The first peak value of the sound is ");
-      Serial.print(firstVolume);
-      Serial.println();
-      Serial.println("Delaying for ");
-      Serial.print(firstWait);
-      Serial.println();
+      Serial.print("The first peak value of the sound is ");
+      Serial.println(firstVolume);
+      Serial.print("Delaying for ");
+      Serial.println(twoClapWait1);
     }
-    delay(firstWait);//NOT WORKING, TODO: FIX, ONLY WORKS THE FIRST TIME, THEN IT NEVER SENSES IF THE NORMAL VOLUME IS RANGE EVEN IF IT IS
+    delay(twoClapWait1);//NOT WORKING, TODO: FIX, ONLY WORKS THE FIRST TIME, THEN IT NEVER SENSES IF THE NORMAL VOLUME IS RANGE EVEN IF IT IS
     if (abs(normalVolume - getVolumeAnalog()) <= 3) {//error of 3, meaning that it won't work if the user selects 3 as the sensitivity on the app
       if (DEBUG) {
         Serial.println("The value of sound is within the range of normal.");
-        Serial.println("Delaying for ");
-        Serial.print(secondWait);
-        Serial.println();
+        Serial.print("Delaying for ");
+        Serial.println(twoClapWait2);
       }
       long currentTime = millis();
-      while (millis() - currentTime <= secondWait && !triggered) {//TO fix, try setting the normal volume again afterwards, for some reason it goes up by 10 after the first time
+      while (millis() - currentTime <= twoClapWait2 && !triggered) {//TO fix, try setting the normal volume again afterwards, for some reason it goes up by 10 after the first time
         int secondVolume = getVolumeAnalog();
         if (normalVolume - secondVolume >= soundDifference) {
           if (DEBUG) {
-            Serial.println("The second peak value of the sound is ");
-            Serial.print(secondVolume);
-            Serial.println();
-          }
+            Serial.print("The second peak value of the sound is ");
+            Serial.println(secondVolume);
+            }
           reverseRelay();
           triggered = true;
-          delay(triggerDelay);
+          delay(soundTriggerDelay);
         }
       }
     }
