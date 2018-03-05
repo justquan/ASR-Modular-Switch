@@ -1,3 +1,4 @@
+//dht sometimes doesn't work 3/4
 //DHT module board pinout (white block facing you):
 // VCC+ (3.3V - 6V power range)
 // OUT (Digital pin), which is set up in dhtSwitch()
@@ -5,16 +6,15 @@
 
 //receives the three char command from the interpretCommand(), and makes sense of it
 void dhtInterpret(String filteredData) {
-  if (firstDHTCall) {
-    dht.setup(dhtPin);//sets up dht pin number
-    firstDHTCall = false;
-  }
+//  if (firstDHTCall) {
+//    dht.setup(dhtPin);//sets up dht pin number
+//    firstDHTCall = false;
+//  }
   tempThreshF = (int)convertCommandToLong(filteredData);//find an easier way to make it from string to int
   if (DEBUG) {
-    Serial.print("Threshold temperature in Fahrenheit set to ");
+    Serial.print("tempThreshF set to ");
     Serial.println(tempThreshF);
   }
-
 }
 
 void dhtSwitch() {//TODO: make it so that there's a range, and option so that if it goes below OR above the temperature, trigger / dormant
@@ -56,8 +56,19 @@ void btPrintDHT() {//TODO: add utilities for humidity
     timeElapsed = 0;
     String dhtStatus = dht.getStatusString();
     if (dhtStatus.equals("OK")) {
-      String message = "X" + String(dht.getTemperature());
+      String message = btSendBlock + String(dht.getTemperature());
+      message.concat("C, ");
+      message.concat(dht.getHumidity());
+      message.concat("%");
+      if (DEBUG) {
+        Serial.println(message);
+      }
       BT.print(message);
+    }
+    else {
+      if (DEBUG) {
+        Serial.println("NAN val");
+      }
     }
   }
 }

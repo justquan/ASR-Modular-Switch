@@ -1,4 +1,4 @@
-
+//all works 3/4
 //returns int data received by the light sensor and prints it
 
 //setup:
@@ -11,10 +11,10 @@
 //assumes that filteredData is a String representation of an integer
 void lightInterpret(String filteredData) {
   if (filteredData.substring(1).equals("TWO")) { //TWO command means Trigger When Over lightValue (when it's dark)
-    triggerWhenOverLightValue = true;
+    triggerWhenBright = true;
   }
   else if (filteredData.substring(1).equals("TWU")) { //TWU command means Trigger When under lightValue (when it's bright)
-    triggerWhenOverLightValue = false;
+    triggerWhenBright = false;
   }
   else {
     lightThresh = filteredData.toInt();
@@ -40,48 +40,72 @@ int getLightData() {
 
 //for debugging
 void printLightData() {
-  Serial.print("lightData: ");
-  Serial.println(getLightData());
+  Serial.print("lightData: " + String(getLightData()));
+//  Serial.println(getLightData());
 }
 
 void lightSwitch() {
-  int currentLightVal = getLightData();
-
-  if (triggerWhenOverLightValue) {//when it is dark
-    if (currentLightVal > lightThresh) {
-      trigger();
+  if (timeElapsed >= lightSamplingInterval) {
+    timeElapsed = 0;
+    int currentLightVal = getLightData();
+    if (currentLightVal > lightThresh) {// if currentLightVal > lightThresh / it is dark
       if (DEBUG) {
-        Serial.println("It's dark! Light value: " + currentLightVal);
+        Serial.println("Bright! Light val:" + currentLightVal);
       }
-
+      trigger();
     }
-    else {// if currentLightVal < lightThresh
+    else {//low value means bright
       dormant();
       if (DEBUG) {
-        Serial.println("It's bright! Light value: " + currentLightVal);
-      }
-    }
-  }
-
-  else {// trigger when under light value (when it is bright
-    if (currentLightVal < lightThresh) {
-      trigger();
-      if (DEBUG) {
-        Serial.println("It's bright! Light value: " + currentLightVal);
-      }
-
-    }
-    else {// if currentLightVal > lightThresh
-      dormant();
-      if (DEBUG) {
-        Serial.println("It's dark! Light value: " + currentLightVal);
+        Serial.println("Dark! light val:" + currentLightVal);
       }
     }
   }
 }
 
+//
+//void lightSwitch() {
+//  if (timeElapsed >= lightSamplingInterval) {
+//    timeElapsed = 0;
+//    int currentLightVal = getLightData();
+//    if (currentLightVal < lightThresh) {//low value means bright
+//      if (DEBUG) {
+//        Serial.println("Bright! Light val:" + currentLightVal);
+//      }
+//      if (triggerWhenBright) {//if set to trigger when bright
+//        trigger();
+//      }
+//      else {//if set to trigger when dark
+//        dormant();
+//      }
+//    }
+//    else {// if currentLightVal > lightThresh / it is dark
+//      if (DEBUG) {
+//        Serial.println("Dark! light val:" + currentLightVal);
+//      }
+//      if (!triggerWhenBright) {//if set to trigger when dark
+//        trigger();
+//      }
+//      else {//if set to trigger when bright
+//        dormant();
+//      }
+//    }
+//  }
+//}
+
 void btPrintLight() {
-  String msg = "X" + getLightData();
+//  int times = 100;//takes average of 100 times
+//  int total;
+//  for (int i = 0; i < times; i++) {
+//    total += getLightData();
+//  }
+//  total /= times;
+  String msg = btSendBlock;
+  msg.concat(getLightData());
+  if(DEBUG) {
+    Serial.print("BT Sending:");
+    Serial.println(msg);
+  }
   BT.println(msg);
 }
 

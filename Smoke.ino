@@ -1,3 +1,4 @@
+//still untested 3/4
 //receives the three char command from the interpretCommand(), and makes sense of it
 
 void smokeInterpret(String filteredData) {
@@ -7,14 +8,13 @@ void smokeInterpret(String filteredData) {
 void smokeSwitch() {
   int currentSmokeVal = getSmokeValue();
   if (DEBUG) {
-    Serial.println("Smoke value (filtered): ");
+    Serial.println("Filtered smoke val:");
     Serial.println(currentSmokeVal);
   }
   if (timeElapsed >= smokeInterval) {//issue with this is that after 49 days, the timeElapsed will rollover. Need to find a system to combat this, perhaps resetting timeElapsed to a lower value when about to overflow.
     if (currentSmokeVal >= smokeThresh) {//when there is smoke at levels that cross the threshold
       trigger();
       timeElapsed = 0;
-      //      delay(10000);//find better way to set a delay
     }
     else {
       dormant();
@@ -35,6 +35,12 @@ int getSmokeValue() {
   else {
     return alteredSmokeVal;
   }
+}
+
+//for debugging
+void printSmoke(){
+  Serial.print("Raw smoke val:");
+  Serial.println(getSmokeValueRaw());
 }
 
 void btPrintSmoke() {

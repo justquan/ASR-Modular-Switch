@@ -13,19 +13,31 @@ void generalInterpret(String filteredData) {
   }
   else if (filteredData.equals("YSB")) {
     strobeIfTriggered = true;//if receives yes strobe command, then set strobeIfTriggered to true
+    if (DEBUG) {
+      Serial.println("strobeIfTriggered = true.");
+    }
   }
   else if (filteredData.equals("NSB")) {//if receives no strobe command, then set strobeIfTriggered to false
     strobeIfTriggered = false; // TODO: properly test and implement
+    Serial.println("strobeIfTriggered = false.");
   }
   else if (filteredData.equals("DCT")) {
     btPowerOff();
     delay(btDisconnectDelay);//gives time to turn off to prevent interference in analog signals. Not affected by clock slowing, so no need to scale.
     setupSwitch = false;
-    setClockSpeedSlow();
+    if (DEBUG) {
+      Serial.println("Disconnecting");
+    }
+    statusLEDOff();
+    //    setClockSpeedSlow();
   }
-  else if(filteredData.equals("SLP")) {//TODO: Make a sleep button in Android app
-    delay(20);
+  else if (filteredData.equals("SLP")) { //TODO: Make a sleep button in Android app
+    delay(50);
     sleep();
+  }
+  else {//if receiving a number, uses it for the timer
+    generalTimerWait = convertCommandToLong(filteredData) * generalTimerMillisPerUnit;//sets the timer wait to equal the value received multiplied by generalTimerMillisPerUnit.
+    timeElapsedGeneralTimerWait = 0;//starts counting down timer before triggering at this point
   }
 }
 
@@ -79,7 +91,7 @@ void printAllEEPROMAnything() {
 //initial setting to default clock speed
 void setClockSpeedDefault() {
   CLKPR = 0x80;//required protocol to set the clock frequency
-  CLKPR = 0x01;//sets the 16 MHz clock frequency to a 1:1 default, unchanged ratio.
+  CLKPR = 0x00;//sets the 16 MHz clock frequency to a 1:1 default, unchanged ratio.
   if (DEBUG) {
     Serial.println("Clock speed set to normal. ");
   }
@@ -93,20 +105,30 @@ void setClockSpeedSlow() {
 
 //uses library fuctions to put microcontroller to sleep
 void sleep() {
-  if(DEBUG) {
-    Serial.println("Going to sleep.");
-    delay(20);
+  openRelay();
+  if (DEBUG) {
+    Serial.println("Sleep");
   }
+  delay(100); //time for the print and for the relay to open if not already
+  btPowerOff();
   set_sleep_mode (SLEEP_MODE_PWR_DOWN);
   sleep_enable();
   sleep_cpu();
+  delay(1000);
 }
 
 //checks to see if the amount of time since switch was turned on is over or at the minimum time before going to sleep, and if it is and is in setup mode, calls sleep()
 //the check for btConnectionMade is to make sure it doesn't go to sleep while a user is trying to connect to it.
 void checkSleep() {
-  if(millis() >= minTimeBeforeSleep && setupSwitch && !btConnectionMade) {
+  if (millis() >= minTimeBeforeSleep && setupSwitch && !btConnectionMade) {
     sleep();
   }
 }
 
+void generalTimerSwitch() {
+  if (generalTimerWait != 0) {
+    if (timeElapsedGeneralTimerWait >= generalTimerWait) {
+      trigger();
+    }
+  }
+}

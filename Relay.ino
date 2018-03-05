@@ -65,10 +65,12 @@ void dormant() {
 //checks if switch should be strobbing, and strobes it if it should in the main void loop()
 void checkStrobe() {
   if (strobing) {
-    unsigned long currentTime = millis();//TODO: use milliselapsed instead and do this for the pir interval
-    if (currentTime - lastStrobeTime >= strobeInterval) {
-      lastStrobeTime = currentTime;
+    if (timeElapsedStrobe >= strobeInterval) {
+      timeElapsedStrobe = 0;//resets timer
       reverseRelay();
+      if(DEBUG) {
+        Serial.println("Strobing on/off.");
+      }
     }
   }
 }

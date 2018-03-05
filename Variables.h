@@ -38,20 +38,27 @@ DHT dht;
 //Sensor setting variables
 int lightThresh = 500; //threshold value for light sensor, a LOWER value means there is more light
 double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
-unsigned long motionInterval = 20000; // default time in milliseconds that the switch is closed after motion is detected until the sensing again
+unsigned long motionInterval = 30000; // default time in milliseconds that the switch is closed after motion is detected until the sensing again
 int smokeThresh = 400;//threshold before recognizing danger
 int smokeInterval = 10000; //10 seconds, need to increase
+boolean motionLastCheck = false;//for when in setup with Android app using motion sensor
 
 //time variables
+long generalTimerMillisPerUnit = 60000 * 5;//for example, if variable is equal to 60,000 * 5, if the user sends a value of 8 for the general timer swtich, the wait will be 40 minutes.
+long generalTimerWait = 0;//setting set by user before the switch triggers if the user is not using a sensor module and just using the timed switch function
 int clockSpeedReduction = 0x01; //1/2 speed
 int setupDelay = 100;
 int minTimeBeforeSleep = 300000;//if switch is in setup mode for  300,000 ms or 5 mins, it goes to sleep and needs to be reset to be used.
-int dhtSamplingPeriod = dht.getMinimumSamplingPeriod();
 int sendDataIntervalMillis = 3000;//data sent to android every 3000ms
 int soundTriggerDelay = 1000;//after sound sensor is triggered, how long it waits before sensing agian
 int twoClapWait1 = 150;//for two clap function of sound sensor
 int twoClapWait2 = 500;//for two clap function of sound sensor
 int btDisconnectDelay = 1000;//gives time to turn off to prevent interference in analog signals. Not affected by clock slowing, so no need to scale.
+
+//sampling intervals
+int lightSamplingInterval = 2000;//with lightSwitch(), sampling occurs every 2 seconds
+int motionSamplingInterval = 2000;
+int dhtSamplingPeriod = 3000;//or could use dht.getMinimumSamplingPeriod()
 
 
 //Scaling constants
@@ -63,6 +70,7 @@ int moduleIndex = -1; //index variable determining which sensor is being used
 //bluetooth variables
 SoftwareSerial BT(BTTX, BTRX); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
 String command = ""; //placeholder string for bluetooth data
+String btSendBlock = "X";//first char before messages sent to android that is never displayed by the android app
 
 boolean btConnectionMade = false;//switches to true if one is made
 boolean setupSwitch = true;//boolean to have bluetooth connection open for setting up the switch
@@ -78,23 +86,28 @@ boolean useTwoClaps = true;//when soundSwitch() is run, detect two claps. Defaul
 
 boolean strobing = false;//determines if the switch should be strobbing
 boolean strobeIfTriggered = false;//determines whether or not switch should strobe if triggered
-unsigned long strobeInterval = 1000; //the length of time in ms for how long the relay should stay remain in a state before switching during strobbing
-unsigned long lastStrobeTime; //to track last time reversed for strobbing
+unsigned long strobeInterval = 1500; //the length of time in ms for how long the relay should stay remain in a state before switching during strobbing
 
 boolean firstSensorCall = true;
 boolean firstDHTCall = true;
 
 //elapsedMillis is a long, so theoretically 49.7 days before rolling over
+elapsedMillis timeElapsedStrobe; // elapsedMillis variable for strobbing intervals.
+elapsedMillis timeElapsedGeneralTimerWait;//compared to generalTimerWait for using the general time setting of the switch.
 elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0. Important: Only use this variable for one thing at a time. This can be used across multiple sensors, but only if the sensors are being used one at a time.
 elapsedMillis timeElapsedSendBT;//timeElapsed but specifically for sending data via BT to Android.
+elapsedMillis timeElapsed2;//for sensorsl ike the motion sensor, where there is one for sampling period and one for the delay
 
 //relay analog value offsets, because relay when on affects analog values
 int relayAnalogValOffsetSound = -6;//UNTESTED, NOT SURE IF 5// after testing 2/6, values first were 361 when closeRelay() and was 367for one second then 364 or 365 when openRelay(). Then, after 5 mins, range was 362 to 368/369. set as 6 on 2/6
-int relayAnalogValOffsetLight = 5;//UNTESTED, NOT SURE IF 5
+int relayAnalogValOffsetLight = 0;//Relaying being on vs off has no signficant effect
 int relayAnalogValOffsetSmoke = 5;//UNTESTED, NOT SURE IF 5
 
 //When there are two options to trigger / a max or min to trigger at
-boolean triggerWhenOverLightValue = true;
+boolean triggerWhenHot = false;
+boolean triggerWhenHumid = false;
+boolean triggerWhenMotion = false;
+boolean triggerWhenBright = false;
 
 //for storing IR Code in EEPROM 2/21
 struct storedSettingsStruct {

@@ -1,3 +1,4 @@
+//Does NOT work when using ftdi breakout because LED flashes on and off on it, changing Analog value. not fully verified working yet 3/4
 //Note: When looking at analog sound values, a lower number means higher volume.
 //When using sound modules like the KY-038, the analog value changes when there are other energy consuming components connected,like LEDS.
 //Note: strobe not implemented with sound sensor, which toggles relay state
@@ -8,19 +9,19 @@ void volumeInterpret(String filteredData) {
   if (filteredData.substring(1).equals ("1CL")) {
     useOneClap = true;
     useTwoClaps = false;
-    Serial.println("Sensing for one clap");
+    Serial.println("Set to 1 clap");
   }
   else if (filteredData.substring(1).equals("2CL")) {
     useOneClap = false;
     useTwoClaps = true;
-    Serial.println("Sensing for two claps");
+    Serial.println("Set to 2 claps");
 
   }
   else {
     //assuming it is an integer 1-20
     soundDifference = (int)convertCommandToLong(filteredData);
     if (DEBUG) {
-      Serial.print("Sound Difference value is set to ");
+      Serial.print("soundDifference = ");
       Serial.println(soundDifference);
     }  
   }
@@ -45,12 +46,12 @@ void oneClapToggle() {
   int currentVolume = getVolumeAnalog();
   if (normalVolume - currentVolume >= soundDifference) { //If the currentvolume has a volume lower than the normal volume by aoundDifference units, it is triggered.
     if (DEBUG) {
-      Serial.print("The initial value of the sound that just triggered the relay is ");
+      Serial.print("1st triggering sound val: ");
       Serial.println(currentVolume);
     }
     reverseRelay();//toggle relay
     if (DEBUG) {
-      Serial.print("Triggered. Delaying listening for ");
+      Serial.print("Triggered. Delay for ");
       Serial.println(soundTriggerDelay);
     }
     delay(soundTriggerDelay);//TODO: Use millis() timer instead of delay(), because delay() delays all other processes in addition to soundSwitch
@@ -59,30 +60,30 @@ void oneClapToggle() {
 }
 //  boolean oddTime = true;//for debugging
 
-void twoClapToggle() {
+void twoClapToggle() {//TODO: juse timeelapsed instead of millis()
   boolean triggered = false;
   int firstVolume = getVolumeAnalog();//includes offset for relay if needed
 
   if (normalVolume - firstVolume >= soundDifference) {
     if (DEBUG) {
-      Serial.print("The first peak value of the sound is ");
+      Serial.print("1st peak sound val: ");
       Serial.println(firstVolume);
-      Serial.print("Delaying for ");
+      Serial.print("Delay for ");
       Serial.println(twoClapWait1);
     }
-    delay(twoClapWait1);//NOT WORKING, TODO: FIX, ONLY WORKS THE FIRST TIME, THEN IT NEVER SENSES IF THE NORMAL VOLUME IS RANGE EVEN IF IT IS
+    delay(twoClapWait1);
     if (abs(normalVolume - getVolumeAnalog()) <= 3) {//error of 3, meaning that it won't work if the user selects 3 as the sensitivity on the app
       if (DEBUG) {
-        Serial.println("The value of sound is within the range of normal.");
-        Serial.print("Delaying for ");
+        Serial.println("sound val in normal range");
+        Serial.print("Delay for ");
         Serial.println(twoClapWait2);
       }
       long currentTime = millis();
-      while (millis() - currentTime <= twoClapWait2 && !triggered) {//TO fix, try setting the normal volume again afterwards, for some reason it goes up by 10 after the first time
+      while (millis() - currentTime <= twoClapWait2 && !triggered) {
         int secondVolume = getVolumeAnalog();
         if (normalVolume - secondVolume >= soundDifference) {
           if (DEBUG) {
-            Serial.print("The second peak value of the sound is ");
+            Serial.print("2nd peak sound val: ");
             Serial.println(secondVolume);
             }
           reverseRelay();
@@ -102,7 +103,7 @@ void setNormalVolume() {
   }
   normalVolume = totalNormalVolume / numNormalVolumes; //average normal volume
   if (DEBUG) {
-    Serial.println("Normal Volume is set to ");
+    Serial.println("normalVolume = ");
     Serial.print(normalVolume);
     Serial.println();
   }

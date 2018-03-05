@@ -1,5 +1,9 @@
+
 void sensorChooser() {//when the switch is not in setup mode, this method is called consistently in the main loop
   switch (moduleIndex) {
+    case -1://general
+      generalTimerSwitch();//TODO: untested
+      break;
     case 1:
       lightSwitch();
       break;
@@ -35,42 +39,13 @@ void receiveData() {
   if (!command.equals("")) {//if command doesn't equal nothing
     String lastFourData = command.substring(command.length() - 4);//the last 4 letters of the command
     if (DEBUG) {
-      Serial.print("Received 4 character command to be interpreted :");
+      Serial.print("Received 4 char command:");
       Serial.println(lastFourData);//prints the last 4 chars of the command
     }
     interpretCommand(lastFourData);
     command = "";//reset command to be an empty String
     btConnectionMade = true;
-  }
-}
-
-//IMPORTANT: with all analog sensors, the data will be somewhat inaccurate with the HC-06 on, so maybe have to offset or take average or both (TODO)
-void sendData() {
-  if (timeElapsed > sendDataIntervalMillis) {
-    timeElapsedSendBT = 0;
-    switch (moduleIndex) {
-      case 1:
-        btPrintLight();
-        break;
-      case 2:
-        //        btPrintIR();
-        //relies on btprinting integrated into storeIRCode()
-        break;
-      case 3:
-        btPrintMotion();
-        break;
-      case 4:
-        btPrintSmoke();
-        break;
-      case 5:
-        btPrintSound();
-        break;
-      case 6:
-        btPrintDHT();//not using temperatureSwitch
-        break;
-      default://if moduleIndex is not between 1 and 6 inclusive
-        break;
-    }
+    statusLEDOff();
   }
 }
 
@@ -116,11 +91,43 @@ void interpretCommand (String dataBT) {
     case 'T':
       moduleIndex = 6;
       dhtInterpret(remainingString);//replaces temperature with dht here
+      break;
     default:
       if (DEBUG) {
-        Serial.println("No module matches the first character");
+        Serial.print("No module matches 1st char. 1st char: ");
+        Serial.println(firstChar);
       }
       break;
+  }
+}
+
+//IMPORTANT: with all analog sensors, the data will be somewhat inaccurate with the HC-06 on, so maybe have to offset or take average or both (TODO)
+void sendData() {
+  if (timeElapsedSendBT >= sendDataIntervalMillis) {
+    timeElapsedSendBT = 0;
+    switch (moduleIndex) {
+      case 1:
+        btPrintLight();
+//        printLightData();
+        break;
+      case 2:
+        //relies on btprinting integrated into storeIRCode()
+        break;
+      case 3:
+        btPrintMotion();
+        break;
+      case 4:
+        btPrintSmoke();
+        break;
+      case 5:
+        btPrintSound();
+        break;
+      case 6:
+        btPrintDHT();//not using temperatureSwitch
+        break;
+      default://if moduleIndex is not between 1 and 6 inclusive
+        break;
+    }
   }
 }
 
@@ -134,7 +141,8 @@ void runSetupProcesses() {
     case 2:
       storeIRCode();//TODO Feb 21, implement
       break;
-    case 3:
+    case 3://motion
+    
       break;
     case 4:
       break;

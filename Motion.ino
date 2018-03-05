@@ -1,4 +1,4 @@
-
+//works, android set time delay works 3/4
 //ISSUE: still delays, false positives
 
 //PIR Pinout:
@@ -12,11 +12,9 @@ void motionInterpret(String filteredData) {//TODO: add ability to change motionI
   //assuming that the received data is an integer in a string form
   motionInterval = convertCommandToLong(filteredData) * 1000;//The last three numbers are multipied by 1000 and set to the motionInterval, so if a value of 60 is received by example,
   if (DEBUG) {
-    Serial.println("Motion Interval has been set to " + String(motionInterval));//String(motionInterval) to make the int a String for displaying
+    Serial.println("motionInterval = " + String(motionInterval));//String(motionInterval) to make the int a String for displaying
   }
-  String stringMessage = "X" + String(motionInterval);
-  BT.print(stringMessage);//for debugging / testing android handler, use print instead of write for full strings. ISSUE: for some reason, on app, only display a portion of the numbers sent. Maybe not fasat enough.
-
+  String stringMessage = btSendBlock + String(motionInterval);
 }
 
 boolean isMotion() {
@@ -31,7 +29,7 @@ boolean isMotion() {
 //for debugging
 void printMotionData() {
   if (isMotion()) {
-    Serial.println("Motion detected!");
+    Serial.println("Motion!");
   }
   else {
     Serial.println("No motion");
@@ -39,27 +37,33 @@ void printMotionData() {
 }
 
 void motionSwitch() {
-  if (DEBUG) {
-    printMotionData();
-  }
-
-  if (timeElapsed >= motionInterval) {
-    if (isMotion()) {
-      trigger();
-      timeElapsed = 0;
+  if (timeElapsed2 >= motionSamplingInterval) {
+    timeElapsed2 = 0;//reset
+    if (DEBUG) {
+      printMotionData();
     }
-    else {
-      dormant();
+    if (timeElapsed >= motionInterval) {
+      if (isMotion()) {
+        trigger();
+        timeElapsed = 0;
+      }
+      else {
+        dormant();
+      }
     }
   }
 }
 
 void btPrintMotion() {
-  if (isMotion()) {
-    BT.println("Motion");
+  boolean motionStatus = isMotion();
+  if (motionStatus != motionLastCheck) {//if status different from last time
+    if (motionStatus) {
+      BT.println(btSendBlock + "Motion");
+    }
+    else {
+      BT.println(btSendBlock + "No Motion");
+    }
   }
-  else {
-    BT.println("No Motion");
-  }
+  motionLastCheck = motionStatus;
 }
 
