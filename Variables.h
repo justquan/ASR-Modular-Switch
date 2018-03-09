@@ -44,11 +44,12 @@ int smokeInterval = 10000; //10 seconds, need to increase
 boolean motionLastCheck = false;//for when in setup with Android app using motion sensor
 
 //time variables
+int statusLEDDelay = 1000;
 long generalTimerMillisPerUnit = 60000 * 5;//for example, if variable is equal to 60,000 * 5, if the user sends a value of 8 for the general timer swtich, the wait will be 40 minutes.
 long generalTimerWait = 0;//setting set by user before the switch triggers if the user is not using a sensor module and just using the timed switch function
 int clockSpeedReduction = 0x01; //1/2 speed
 int setupDelay = 100;
-int minTimeBeforeSleep = 300000;//if switch is in setup mode for  300,000 ms or 5 mins, it goes to sleep and needs to be reset to be used.
+int minTimeBeforeSleep = 600000;//if switch is in setup mode for  600,000 ms or 10 mins, it goes to sleep and needs to be reset to be used.
 int sendDataIntervalMillis = 3000;//data sent to android every 3000ms
 int soundTriggerDelay = 1000;//after sound sensor is triggered, how long it waits before sensing agian
 int twoClapWait1 = 150;//for two clap function of sound sensor
@@ -70,7 +71,7 @@ int moduleIndex = -1; //index variable determining which sensor is being used
 //bluetooth variables
 SoftwareSerial BT(BTTX, BTRX); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
 String command = ""; //placeholder string for bluetooth data
-String btSendBlock = "X";//first char before messages sent to android that is never displayed by the android app
+String btSendBlock = " ";//first char before messages sent to android that is never displayed by the android app. Make an actual char if needed for debuggin besides just a space.
 
 boolean btConnectionMade = false;//switches to true if one is made
 boolean setupSwitch = true;//boolean to have bluetooth connection open for setting up the switch
@@ -109,7 +110,7 @@ boolean triggerWhenHumid = false;
 boolean triggerWhenMotion = false;
 boolean triggerWhenBright = false;
 
-//for storing IR Code in EEPROM 2/21
+//for storing IR Code in EEPROM
 struct storedSettingsStruct {
   long irEEPROMCode;//should be in DEC form, use long not int so you won't run out of room
 };

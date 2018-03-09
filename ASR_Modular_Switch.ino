@@ -7,6 +7,8 @@ void setup() {
 
   //setting pin modes
   pinMode(moduleDigitalPin, INPUT);
+  pinMode(moduleDigitalPin, INPUT_PULLUP);//enables integrated pull up resistor on digital pin
+  digitalWrite(A0, INPUT_PULLUP);  // set pullup on analog pin 0 for the analog module pin
   pinMode(relayPin, OUTPUT);
   pinMode(redStatusLED, OUTPUT);
   pinMode(greenStatusLED, OUTPUT);
@@ -26,9 +28,15 @@ void setup() {
   timeElapsed = 0; //reset time
   timeElapsedSendBT = 0;
   setClockSpeedDefault();//causing issues before
-  greenStatusLEDOn();
+//  greenStatusLEDOn();
   dht.setup(dhtPin);//sets up dht pin number
   //don't know if it conflicts yet with others modules yet if you just set up at the start
+  redStatusLEDOn();
+  delay(statusLEDDelay);
+  statusLEDOff();
+  greenStatusLEDOn();
+  delay(statusLEDDelay);
+  statusLEDOff();
 }
 
 void loop() {
