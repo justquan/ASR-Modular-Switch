@@ -23,7 +23,7 @@ void volumeInterpret(String filteredData) {
     if (DEBUG) {
       Serial.print("soundDifference = ");
       Serial.println(soundDifference);
-    }  
+    }
   }
 }
 
@@ -44,6 +44,7 @@ void soundSwitch() {
 
 void oneClapToggle() {
   int currentVolume = getVolumeAnalog();
+  errorDetection(currentVolume);
   if (normalVolume - currentVolume >= soundDifference) { //If the currentvolume has a volume lower than the normal volume by aoundDifference units, it is triggered.
     if (DEBUG) {
       Serial.print("1st triggering sound val: ");
@@ -63,7 +64,7 @@ void oneClapToggle() {
 void twoClapToggle() {//TODO: juse timeelapsed instead of millis()
   boolean triggered = false;
   int firstVolume = getVolumeAnalog();//includes offset for relay if needed
-
+  errorDetection(firstVolume);
   if (normalVolume - firstVolume >= soundDifference) {
     if (DEBUG) {
       Serial.print("1st peak sound val: ");
@@ -85,7 +86,7 @@ void twoClapToggle() {//TODO: juse timeelapsed instead of millis()
           if (DEBUG) {
             Serial.print("2nd peak sound val: ");
             Serial.println(secondVolume);
-            }
+          }
           reverseRelay();
           triggered = true;
           delay(soundTriggerDelay);
@@ -127,7 +128,11 @@ int getVolumeAnalog() {
 //TODO: test this and find a place to put it. May have to make a separate function in the main loop that checks the module number while in setup mode, and uses the correct print function for the right sensor.
 void btPrintSound() {
   String val = String(getVolumeAnalog());
-  String msg = "X" + val;//offset
+  String msg = btSendBlock + val;//offset
   BT.println(msg);
+}
+
+void printSoundRaw() {
+  Serial.println(getVolumeAnalogRaw());
 }
 

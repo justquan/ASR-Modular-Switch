@@ -28,8 +28,7 @@ void setup() {
   timeElapsed = 0; //reset time
   timeElapsedSendBT = 0;
   setClockSpeedDefault();//causing issues before
-//  greenStatusLEDOn();
-  dht.setup(dhtPin);//sets up dht pin number
+  //  greenStatusLEDOn();
   //don't know if it conflicts yet with others modules yet if you just set up at the start
   redStatusLEDOn();
   delay(statusLEDDelay);
@@ -37,6 +36,7 @@ void setup() {
   greenStatusLEDOn();
   delay(statusLEDDelay);
   statusLEDOff();
+  dht.setup(dhtPin);
 }
 
 void loop() {

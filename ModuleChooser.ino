@@ -142,13 +142,13 @@ void runSetupProcesses() {
       storeIRCode();//TODO Feb 21, implement
       break;
     case 3://motion
-    
       break;
-    case 4:
+    case 4://smoke
       break;
-    case 5:
+    case 5://sound
+//          printSoundRaw();
       break;
-    case 6:
+    case 6://dht
       break;
     default://if moduleIndex is not between 1 and 6 inclusive
       break;

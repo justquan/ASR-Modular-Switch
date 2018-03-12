@@ -21,7 +21,13 @@ void generalInterpret(String filteredData) {
     strobeIfTriggered = false; // TODO: properly test and implement
     Serial.println("strobeIfTriggered = false.");
   }
-  else if (filteredData.equals("DCT")) {
+  else if (filteredData.equals("DCT")) {//put in dormant state
+    if(triggerStateIsClose) {
+      openRelay();
+    }
+    else {
+      closeRelay();
+    }
     btPowerOff();
     delay(btDisconnectDelay);//gives time to turn off to prevent interference in analog signals. Not affected by clock slowing, so no need to scale.
     setupSwitch = false;
@@ -36,7 +42,7 @@ void generalInterpret(String filteredData) {
     sleep();
   }
   else {//if receiving a number, uses it for the timer
-    generalTimerWait = convertCommandToLong(filteredData) * generalTimerMillisPerUnit;//sets the timer wait to equal the value received multiplied by generalTimerMillisPerUnit.
+    generalTimerWait = convertCommandToLong(filteredData) * timerMillisPerUnit;//sets the timer wait to equal the value received multiplied by generalTimerMillisPerUnit.
     timeElapsedGeneralTimerWait = 0;//starts counting down timer before triggering at this point
   }
 }
@@ -121,6 +127,9 @@ void sleep() {
 //the check for btConnectionMade is to make sure it doesn't go to sleep while a user is trying to connect to it.
 void checkSleep() {
   if (millis() >= minTimeBeforeSleep && setupSwitch && !btConnectionMade) {
+    if (DEBUG) {
+      Serial.println(millis());
+    }
     sleep();
   }
 }
@@ -129,6 +138,17 @@ void generalTimerSwitch() {
   if (generalTimerWait != 0) {
     if (timeElapsedGeneralTimerWait >= generalTimerWait) {
       trigger();
+    }
+  }
+}
+
+//Determines if an analog sensor is disconnected or broken based on the value, and puts arduino to sleep if broken.
+void errorDetection(int analogVal) {
+  if (analogVal >= analogThresholdBeforeError) {
+    redStatusLEDOn();
+    sleep();
+    if (DEBUG) {
+      Serial.println("SENSOR ERROR");
     }
   }
 }

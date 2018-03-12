@@ -6,18 +6,22 @@ void smokeInterpret(String filteredData) {
 }
 
 void smokeSwitch() {
-  int currentSmokeVal = getSmokeValue();
-  if (DEBUG) {
-    Serial.println("Filtered smoke val:");
-    Serial.println(currentSmokeVal);
-  }
-  if (timeElapsed >= smokeInterval) {//issue with this is that after 49 days, the timeElapsed will rollover. Need to find a system to combat this, perhaps resetting timeElapsed to a lower value when about to overflow.
-    if (currentSmokeVal >= smokeThresh) {//when there is smoke at levels that cross the threshold
-      trigger();
-      timeElapsed = 0;
+  if (timeElapsed >= smokeSamplingInterval) {
+    timeElapsed = 0;
+    int currentSmokeVal = getSmokeValue();
+    errorDetection(currentSmokeVal);
+    if (DEBUG) {
+      Serial.println("Filtered smoke val:");
+      Serial.println(currentSmokeVal);
     }
-    else {
-      dormant();
+    if (timeElapsed2 >= smokeInterval) {//issue with this is that after 49 days, the timeElapsed will rollover. Need to find a system to combat this, perhaps resetting timeElapsed to a lower value when about to overflow.
+      if (currentSmokeVal >= smokeThresh) {//when there is smoke at levels that cross the threshold
+        trigger();
+        timeElapsed2 = 0;
+      }
+      else {
+        dormant();
+      }
     }
   }
 }
@@ -38,13 +42,13 @@ int getSmokeValue() {
 }
 
 //for debugging
-void printSmoke(){
+void printSmoke() {
   Serial.print("Raw smoke val:");
   Serial.println(getSmokeValueRaw());
 }
 
 void btPrintSmoke() {
-  String msg = "X" + getSmokeValue();
+  String msg = btSendBlock + getSmokeValue();
   BT.println(msg);
 }
 

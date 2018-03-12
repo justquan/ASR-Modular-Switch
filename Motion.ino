@@ -10,11 +10,10 @@
 //receives the three char command from the interpretCommand(), and makes sense of it
 void motionInterpret(String filteredData) {//TODO: add ability to change motionInterval based on number from the android app
   //assuming that the received data is an integer in a string form
-  motionInterval = convertCommandToLong(filteredData) * 1000;//The last three numbers are multipied by 1000 and set to the motionInterval, so if a value of 60 is received by example,
+  motionInterval = convertCommandToLong(filteredData) * timerMillisPerUnit;//The last three numbers are multipied by timerMillisPerUnit
   if (DEBUG) {
     Serial.println("motionInterval = " + String(motionInterval));//String(motionInterval) to make the int a String for displaying
   }
-  String stringMessage = btSendBlock + String(motionInterval);
 }
 
 boolean isMotion() {
@@ -56,7 +55,7 @@ void motionSwitch() {
 
 void btPrintMotion() {
   boolean motionStatus = isMotion();
-  if (motionStatus != motionLastCheck) {//if status different from last time
+  if (motionStatus != motionLastCheck) {//if status different from last time. default is motionLastCheck = false, which means no motion
     if (motionStatus) {
       BT.println(btSendBlock + "Motion");
     }

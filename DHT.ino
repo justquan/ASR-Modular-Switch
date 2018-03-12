@@ -6,31 +6,70 @@
 
 //receives the three char command from the interpretCommand(), and makes sense of it
 void dhtInterpret(String filteredData) {
-//  if (firstDHTCall) {
-//    dht.setup(dhtPin);//sets up dht pin number
-//    firstDHTCall = false;
-//  }
-  tempThreshF = (int)convertCommandToLong(filteredData);//find an easier way to make it from string to int
-  if (DEBUG) {
-    Serial.print("tempThreshF set to ");
-    Serial.println(tempThreshF);
+  //    if (firstDHTCall) {
+  //      dht.setup(dhtPin);//sets up dht pin number
+  //      firstDHTCall = false;
+  //      delay(1000);
+  //    }
+  if (filteredData.equals("__T")) {
+    useTempNotHumidity = true;//so use temperature based switch
+  }
+  else if (filteredData.equals("__H")) {
+    useTempNotHumidity = false; // so use humidity based switch
+  }
+  else {//if threshold number
+    if (useTempNotHumidity) { //temp based switch
+      tempThreshF = (int)convertCommandToLong(filteredData);//find an easier way to make it from string to int
+      if (DEBUG) {
+        Serial.print("tempThreshF=");
+        Serial.println(tempThreshF);
+      }
+    }
+    else {//if using humidity based switch
+      humidityThresh = (int)convertCommandToLong(filteredData);//TODO: eventually differentiate between the values
+      if (DEBUG) {
+        Serial.print("humidityThresh=");
+        Serial.println(humidityThresh);
+      }
+    }
   }
 }
+
 
 void dhtSwitch() {//TODO: make it so that there's a range, and option so that if it goes below OR above the temperature, trigger / dormant
   //  if (DEBUG) {
   //    exampleDHTPrint();
   //  }
   if (timeElapsed >= dhtSamplingPeriod) {
+    timeElapsed = 0;
     float currentTempC = dht.getTemperature();
     float currentTempF = dht.toFahrenheit(currentTempC);
     String dhtStatus = dht.getStatusString();
+    float currentHumidity = dht.getHumidity();
+    if (DEBUG) {
+      Serial.print("TempF: ");
+      Serial.print(currentTempF);
+      Serial.print(", TempC : ");
+      Serial.print(currentTempC);
+      Serial.print(", Humidity: ");
+      Serial.println(currentHumidity);
+    }
     if (dhtStatus.equals("OK")) {//ignore bad or not-a-number (nan) data from the library
-      if (currentTempF >= tempThreshF) {
-        trigger();
+      if (useTempNotHumidity) {///temperature based switch
+        if (currentTempF >= tempThreshF) {
+          trigger();
+        }
+        else {
+          dormant();
+        }
       }
-      else {
-        dormant();
+      else {//humidity based switch
+        if (currentHumidity >= humidityThresh) {
+          trigger();
+        }
+        else {
+          dormant();
+        }
       }
     }
   }
@@ -54,16 +93,24 @@ void exampleDHTPrint() {
 void btPrintDHT() {//TODO: add utilities for humidity
   if (timeElapsed >= dhtSamplingPeriod) {
     timeElapsed = 0;
+    String msg;
     String dhtStatus = dht.getStatusString();
+    float currentTempC = dht.getTemperature();
+    float currentTempF = dht.toFahrenheit(currentTempC);
+    float currentHumidity = dht.getHumidity();
     if (dhtStatus.equals("OK")) {
-      String message = btSendBlock + String(dht.getTemperature());
-      message.concat("C, ");
-      message.concat(dht.getHumidity());
-      message.concat("%");
-      if (DEBUG) {
-        Serial.println(message);
+      if (useTempNotHumidity) {//if temp based switch
+        String msg = String(currentTempF);
+        msg.concat("F");
       }
-      BT.print(message);
+      else {//
+        msg = String(currentHumidity);
+        msg.concat("%");
+      }
+      if (DEBUG) {
+        Serial.println(msg);
+      }
+      BT.print(btSendBlock + msg);
     }
     else {
       if (DEBUG) {

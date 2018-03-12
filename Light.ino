@@ -48,6 +48,8 @@ void lightSwitch() {
   if (timeElapsed >= lightSamplingInterval) {
     timeElapsed = 0;
     int currentLightVal = getLightData();
+    errorDetection(currentLightVal);
+    
     if (currentLightVal > lightThresh) {// if currentLightVal > lightThresh / it is dark
       if (DEBUG) {
         Serial.println("Bright! Light val:" + currentLightVal);

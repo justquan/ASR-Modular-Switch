@@ -30,6 +30,7 @@ void infraredSwitch() {
         Serial.println("IR Match");
       }
       reverseRelay();//toggles relay
+      delay(irDebounceInterval);//for debouncing
     }
     else {
       if (DEBUG) {

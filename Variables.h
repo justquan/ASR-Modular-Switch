@@ -36,20 +36,24 @@ decode_results results;
 DHT dht;
 
 //Sensor setting variables
+int humidityThresh = 75;//if humidity over 75%, trigger. default 75.
+boolean useTempNotHumidity = true;//default is true, so a temperature based switch, not a humidity based switch
+int analogThresholdBeforeError = 1000;//Max analog value is 1024. Using Arduino's built in pull up resistor, value is around 1003. So if over this threshold, you know the sensor or broken or was removed.
 int lightThresh = 500; //threshold value for light sensor, a LOWER value means there is more light
 double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
-unsigned long motionInterval = 30000; // default time in milliseconds that the switch is closed after motion is detected until the sensing again
+unsigned long motionInterval = 5000; // default time in milliseconds that the switch is closed after motion is detected until the sensing again
 int smokeThresh = 400;//threshold before recognizing danger
-int smokeInterval = 10000; //10 seconds, need to increase
+int smokeInterval = 60000 * 10; //10 min, may need to increase
 boolean motionLastCheck = false;//for when in setup with Android app using motion sensor
 
 //time variables
+int irDebounceInterval = 2000;//So if somebody presses a button multiple times or holds it down, it won't toggle multiple times. For debouncing.
 int statusLEDDelay = 1000;
-long generalTimerMillisPerUnit = 60000 * 5;//for example, if variable is equal to 60,000 * 5, if the user sends a value of 8 for the general timer swtich, the wait will be 40 minutes.
+long timerMillisPerUnit = 60000 * 1;//for example, if variable is equal to 60,000 * 1, if the user sends a value of 8 for the general timer swtich, the wait will be 8 minutes.
 long generalTimerWait = 0;//setting set by user before the switch triggers if the user is not using a sensor module and just using the timed switch function
 int clockSpeedReduction = 0x01; //1/2 speed
-int setupDelay = 100;
-int minTimeBeforeSleep = 600000;//if switch is in setup mode for  600,000 ms or 10 mins, it goes to sleep and needs to be reset to be used.
+int setupDelay = 200;
+long minTimeBeforeSleep = 600000;//if switch is in setup mode for  600,000 ms or 10 mins, it goes to sleep and needs to be reset to be used. Make sure to use a long when comparing millis() to it
 int sendDataIntervalMillis = 3000;//data sent to android every 3000ms
 int soundTriggerDelay = 1000;//after sound sensor is triggered, how long it waits before sensing agian
 int twoClapWait1 = 150;//for two clap function of sound sensor
@@ -59,7 +63,8 @@ int btDisconnectDelay = 1000;//gives time to turn off to prevent interference in
 //sampling intervals
 int lightSamplingInterval = 2000;//with lightSwitch(), sampling occurs every 2 seconds
 int motionSamplingInterval = 2000;
-int dhtSamplingPeriod = 3000;//or could use dht.getMinimumSamplingPeriod()
+int smokeSamplingInterval = 1000;
+int dhtSamplingPeriod = dht.getMinimumSamplingPeriod();//or could use dht.getMinimumSamplingPeriod()
 
 
 //Scaling constants
@@ -100,9 +105,9 @@ elapsedMillis timeElapsedSendBT;//timeElapsed but specifically for sending data 
 elapsedMillis timeElapsed2;//for sensorsl ike the motion sensor, where there is one for sampling period and one for the delay
 
 //relay analog value offsets, because relay when on affects analog values
-int relayAnalogValOffsetSound = -6;//UNTESTED, NOT SURE IF 5// after testing 2/6, values first were 361 when closeRelay() and was 367for one second then 364 or 365 when openRelay(). Then, after 5 mins, range was 362 to 368/369. set as 6 on 2/6
+int relayAnalogValOffsetSound = 0;//used to be -6//UNTESTED, NOT SURE IF 5// after testing 2/6, values first were 361 when closeRelay() and was 367for one second then 364 or 365 when openRelay(). Then, after 5 mins, range was 362 to 368/369. set as 6 on 2/6
 int relayAnalogValOffsetLight = 0;//Relaying being on vs off has no signficant effect
-int relayAnalogValOffsetSmoke = 5;//UNTESTED, NOT SURE IF 5
+int relayAnalogValOffsetSmoke = 0;//UNTESTED, NOT SURE IF 5
 
 //When there are two options to trigger / a max or min to trigger at
 boolean triggerWhenHot = false;
