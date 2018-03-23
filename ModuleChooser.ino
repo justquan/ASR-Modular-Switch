@@ -103,7 +103,7 @@ void interpretCommand (String dataBT) {
 
 //IMPORTANT: with all analog sensors, the data will be somewhat inaccurate with the HC-06 on, so maybe have to offset or take average or both (TODO)
 void sendData() {
-  if (timeElapsedSendBT >= sendDataIntervalMillis) {
+  if (timeElapsedSendBT >= sendDataIntervalMillis && btConnectionMade) {
     timeElapsedSendBT = 0;
     switch (moduleIndex) {
       case 1:
@@ -136,17 +136,15 @@ void runSetupProcesses() {
   checkSleep();
   switch (moduleIndex) {
     case 1:
-      //      btPrintLight();
       break;
     case 2:
-      storeIRCode();//TODO Feb 21, implement
+      storeIRCode();
       break;
     case 3://motion
       break;
     case 4://smoke
       break;
     case 5://sound
-//          printSoundRaw();
       break;
     case 6://dht
       break;

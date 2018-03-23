@@ -1,8 +1,5 @@
-//works 3/4
-
 //CHQ1838: Black dot with X facing towards you, left to right
 //OUT, GND, VCC (works with both 5V and 3.3V)
-//works
 
 //receives the three char command from the interpretCommand(), and makes sense of it
 void infraredInterpret(String filteredData) {

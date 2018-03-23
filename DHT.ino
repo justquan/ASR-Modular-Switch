@@ -1,4 +1,3 @@
-//dht sometimes doesn't work 3/4
 //DHT module board pinout (white block facing you):
 // VCC+ (3.3V - 6V power range)
 // OUT (Digital pin), which is set up in dhtSwitch()
@@ -6,11 +5,6 @@
 
 //receives the three char command from the interpretCommand(), and makes sense of it
 void dhtInterpret(String filteredData) {
-  //    if (firstDHTCall) {
-  //      dht.setup(dhtPin);//sets up dht pin number
-  //      firstDHTCall = false;
-  //      delay(1000);
-  //    }
   if (filteredData.equals("__T")) {
     useTempNotHumidity = true;//so use temperature based switch
   }
@@ -37,9 +31,6 @@ void dhtInterpret(String filteredData) {
 
 
 void dhtSwitch() {//TODO: make it so that there's a range, and option so that if it goes below OR above the temperature, trigger / dormant
-  //  if (DEBUG) {
-  //    exampleDHTPrint();
-  //  }
   if (timeElapsed >= dhtSamplingPeriod) {
     timeElapsed = 0;
     float currentTempC = dht.getTemperature();
@@ -90,7 +81,7 @@ void exampleDHTPrint() {
 }
 
 //only use when not using dhtSwitch()
-void btPrintDHT() {//TODO: add utilities for humidity
+void btPrintDHT() {
   if (timeElapsed >= dhtSamplingPeriod) {
     timeElapsed = 0;
     String msg;

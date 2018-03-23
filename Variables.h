@@ -9,7 +9,6 @@
 //Pins
 int moduleAnalogPin = 0;//The pins for modules using the soldered board
 int moduleDigitalPin = 10;
-
 int relayPin = 2; //D2, digital pin for relay control
 int greenStatusLED = 5;//green digital pin for RG led
 int redStatusLED = 6;//red digital pin for RG led
@@ -43,10 +42,15 @@ int lightThresh = 500; //threshold value for light sensor, a LOWER value means t
 double tempThreshF = 60; //threshold value for temperature sensor in degrees Fahrenheit
 unsigned long motionInterval = 5000; // default time in milliseconds that the switch is closed after motion is detected until the sensing again
 int smokeThresh = 400;//threshold before recognizing danger
-int smokeInterval = 60000 * 10; //10 min, may need to increase
 boolean motionLastCheck = false;//for when in setup with Android app using motion sensor
+boolean saveIR = true; //determines if switch is in save mode or not for the IR sensor. feb 22, made it so that the defualt is true
+int normalVolume = -1; //saves the value from the sound sensor module at normal levels
+int soundDifference = 6; //saves the difference from normalValue needed to register as a sound loud enough to trigger the switch
+boolean useOneClap = false;//when soundSwitch() is run, detect one clap. Default state is false.
+boolean useTwoClaps = true;//when soundSwitch() is run, detect two claps. Default state is true.
 
 //time variables
+int smokeInterval = 60000 * 10; //10 min, may need to increase
 int irDebounceInterval = 2000;//So if somebody presses a button multiple times or holds it down, it won't toggle multiple times. For debouncing.
 int statusLEDDelay = 1000;
 long timerMillisPerUnit = 60000 * 1;//for example, if variable is equal to 60,000 * 1, if the user sends a value of 8 for the general timer swtich, the wait will be 8 minutes.
@@ -60,12 +64,18 @@ int twoClapWait1 = 150;//for two clap function of sound sensor
 int twoClapWait2 = 500;//for two clap function of sound sensor
 int btDisconnectDelay = 1000;//gives time to turn off to prevent interference in analog signals. Not affected by clock slowing, so no need to scale.
 
+//elapsedMillis is a long, so theoretically 49.7 days before rolling over
+elapsedMillis timeElapsedStrobe; // elapsedMillis variable for strobbing intervals.
+elapsedMillis timeElapsedGeneralTimerWait;//compared to generalTimerWait for using the general time setting of the switch.
+elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0. Important: Only use this variable for one thing at a time. This can be used across multiple sensors, but only if the sensors are being used one at a time.
+elapsedMillis timeElapsedSendBT;//timeElapsed but specifically for sending data via BT to Android.
+elapsedMillis timeElapsed2;//for sensorsl ike the motion sensor, where there is one for sampling period and one for the delay
+
 //sampling intervals
 int lightSamplingInterval = 2000;//with lightSwitch(), sampling occurs every 2 seconds
 int motionSamplingInterval = 2000;
 int smokeSamplingInterval = 1000;
 int dhtSamplingPeriod = dht.getMinimumSamplingPeriod();//or could use dht.getMinimumSamplingPeriod()
-
 
 //Scaling constants
 const double tempConversion = .48828125; //constant for lm35 sensor
@@ -77,32 +87,19 @@ int moduleIndex = -1; //index variable determining which sensor is being used
 SoftwareSerial BT(BTTX, BTRX); //makes a "virtual" serial port / UART, connect bt module TX to D10, and BT RX to D11, BT Vcc to 5v, GND to GND
 String command = ""; //placeholder string for bluetooth data
 String btSendBlock = " ";//first char before messages sent to android that is never displayed by the android app. Make an actual char if needed for debuggin besides just a space.
-
 boolean btConnectionMade = false;//switches to true if one is made
+
+//general mode booleans
 boolean setupSwitch = true;//boolean to have bluetooth connection open for setting up the switch
 boolean DEBUG = true;
 boolean sendDataToAndroid = true;//boolean determining whether or not switch should try sending data to the Android via BT.
-boolean saveIR = true; //determines if switch is in save mode or not for the IR sensor. feb 22, made it so that the defualt is true
 
-int normalVolume = -1; //saves the value from the sound sensor module at normal levels
-int soundDifference = 6; //saves the difference from normalValue needed to register as a sound loud enough to trigger the switch
-
-boolean useOneClap = false;//when soundSwitch() is run, detect one clap. Default state is false.
-boolean useTwoClaps = true;//when soundSwitch() is run, detect two claps. Default state is true.
-
+//strobe variables
 boolean strobing = false;//determines if the switch should be strobbing
 boolean strobeIfTriggered = false;//determines whether or not switch should strobe if triggered
 unsigned long strobeInterval = 1500; //the length of time in ms for how long the relay should stay remain in a state before switching during strobbing
 
 boolean firstSensorCall = true;
-boolean firstDHTCall = true;
-
-//elapsedMillis is a long, so theoretically 49.7 days before rolling over
-elapsedMillis timeElapsedStrobe; // elapsedMillis variable for strobbing intervals.
-elapsedMillis timeElapsedGeneralTimerWait;//compared to generalTimerWait for using the general time setting of the switch.
-elapsedMillis timeElapsed; //always counts unless reset by making it equal to 0. Important: Only use this variable for one thing at a time. This can be used across multiple sensors, but only if the sensors are being used one at a time.
-elapsedMillis timeElapsedSendBT;//timeElapsed but specifically for sending data via BT to Android.
-elapsedMillis timeElapsed2;//for sensorsl ike the motion sensor, where there is one for sampling period and one for the delay
 
 //relay analog value offsets, because relay when on affects analog values
 int relayAnalogValOffsetSound = 0;//used to be -6//UNTESTED, NOT SURE IF 5// after testing 2/6, values first were 361 when closeRelay() and was 367for one second then 364 or 365 when openRelay(). Then, after 5 mins, range was 362 to 368/369. set as 6 on 2/6

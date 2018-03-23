@@ -1,6 +1,3 @@
-//works, android set time delay works 3/4
-//ISSUE: still delays, false positives
-
 //PIR Pinout:
 //Lense facing away from you:
 //Left Pin: 5V

@@ -1,7 +1,4 @@
-//all works 3/4
-//returns int data received by the light sensor and prints it
-
-//setup:
+// manual photoresistor setup:
 //photoresistor end 1 to GND
 //photoresistor end 2 to Analog pin 0
 //10k resistor end 1 to Analog pin 0
@@ -65,43 +62,7 @@ void lightSwitch() {
   }
 }
 
-//
-//void lightSwitch() {
-//  if (timeElapsed >= lightSamplingInterval) {
-//    timeElapsed = 0;
-//    int currentLightVal = getLightData();
-//    if (currentLightVal < lightThresh) {//low value means bright
-//      if (DEBUG) {
-//        Serial.println("Bright! Light val:" + currentLightVal);
-//      }
-//      if (triggerWhenBright) {//if set to trigger when bright
-//        trigger();
-//      }
-//      else {//if set to trigger when dark
-//        dormant();
-//      }
-//    }
-//    else {// if currentLightVal > lightThresh / it is dark
-//      if (DEBUG) {
-//        Serial.println("Dark! light val:" + currentLightVal);
-//      }
-//      if (!triggerWhenBright) {//if set to trigger when dark
-//        trigger();
-//      }
-//      else {//if set to trigger when bright
-//        dormant();
-//      }
-//    }
-//  }
-//}
-
 void btPrintLight() {
-//  int times = 100;//takes average of 100 times
-//  int total;
-//  for (int i = 0; i < times; i++) {
-//    total += getLightData();
-//  }
-//  total /= times;
   String msg = btSendBlock;
   msg.concat(getLightData());
   if(DEBUG) {
