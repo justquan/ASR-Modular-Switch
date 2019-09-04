@@ -1,4 +1,5 @@
-# ASR-Modular-Switch
+## Intelligent Switch Employing Modular Sensors for Improved Power Control with a Focus on Energy Efficiency
+
 Arduino code for 2018 ASR Project
 
 Final Report:
